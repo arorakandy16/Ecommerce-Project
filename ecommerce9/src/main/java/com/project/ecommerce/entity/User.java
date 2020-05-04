@@ -11,8 +11,11 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User extends Auditable<String> {
 
+public class User extends Auditable<String> {
+/*
+    User class extends Auditable for Auditing
+ */
     
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -25,8 +28,10 @@ public class User extends Auditable<String> {
     private String email;
 
     @NotNull
+
 //    @Pattern(regexp = "^[a-zA-Z]{1,20}$",message =
 //            "field first name can only contains alphabets")
+
     private String firstname;
 
     private String middlename;
@@ -49,6 +54,7 @@ public class User extends Auditable<String> {
             "Password should contain atleast 8 characters " +
             "and one Uppercase,lowercase,digit and special character")
     private String confirmPassword;
+
 
     private boolean is_deleted = false;
 

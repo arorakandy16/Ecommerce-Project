@@ -16,14 +16,18 @@ import java.util.Locale;
 
 @SpringBootApplication
 
-//mail will behave asynchronous
+
+// For asynchronous email
 @EnableAsync
 
-//
+
+// To enable JPA Auditing
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 
-//
+
+// @EnableScheduling annotation is used to enable the scheduler for your application.
 @EnableScheduling
+
 public class EcommerceApplication {
 
 	public static void main(String[] args) {
@@ -31,10 +35,18 @@ public class EcommerceApplication {
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
 
+
+	// Used for Auditing
+
 	@Bean
 	public AuditorAware<String> auditorAware() {
 		return new AuditorAwareImpl();
 	}
+
+
+
+
+	// Used for Internationalization
 
 	@Bean
 	public LocaleResolver localeResolver(){

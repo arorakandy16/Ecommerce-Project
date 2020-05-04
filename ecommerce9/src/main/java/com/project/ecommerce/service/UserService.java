@@ -111,8 +111,15 @@ public class UserService {
     }
 
 
-    @Scheduled(cron = "0 14 17 * * ?")
+    //-------------------------------Scheduling-------------------------------------------------
+
+    //Scheduling is a process of executing the tasks for the specific time period.
+    //Java Cron expressions are used to configure the instances of CronTrigger
+    @Scheduled(cron = "0 00 00 * * ?")
+
     public void scheduling(){
+
         System.out.println("This is a Scheduler");
     }
+
 }

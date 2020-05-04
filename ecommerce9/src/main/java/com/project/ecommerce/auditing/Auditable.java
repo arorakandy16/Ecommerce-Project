@@ -12,23 +12,39 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
+
+/*
+  Create Generic Auditable Class with Spring Data Annotations
+  @CreatedBy, @CreatedDate, @LastModifiedBy, and @LastModifiedDate
+ */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
+/*
+    Using the AuditingEntityListener Class With @EntityListeners
+ */
 public abstract class Auditable<String>{
 
     @CreatedBy
     protected java.lang.String createdBy;
 
+
     @CreatedDate
+
     @Temporal(TemporalType.DATE)
     protected Date createdDate;
+
 
     @LastModifiedBy
     protected java.lang.String lastModifiedBy;
 
+
     @LastModifiedDate
+
     @Temporal(TemporalType.TIMESTAMP)
     protected java.util.Date lastModifiedDate;
+
+
+
 
     public java.lang.String getCreatedBy() {
         return createdBy;

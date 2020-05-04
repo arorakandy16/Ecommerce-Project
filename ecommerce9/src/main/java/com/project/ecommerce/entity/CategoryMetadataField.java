@@ -2,6 +2,7 @@ package com.project.ecommerce.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ public class CategoryMetadataField {
 
     @NotNull
     @Column(unique = true)
+//    @Pattern(regexp = "^[a-zA-Z ]{2,50}$",message
+//            = "field Category name can only contains alphabets")
     private String name;
 
 

@@ -17,6 +17,8 @@ public class ProductCategory {
 
     @NotNull
     @Column(unique = true)
+    //@Pattern(regexp = "^[a-zA-Z]{1,50}$",
+    // message = "field category name can only contains alphabets")
     private String name;
 
 
