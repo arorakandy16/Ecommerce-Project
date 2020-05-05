@@ -11,6 +11,8 @@ import com.project.ecommerce.repository.*;
 import com.project.ecommerce.security.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -138,7 +140,7 @@ public class ProductVariationService {
 
     //Find All Variation
 
-    public List<ProductVariant> findAllVariation(Long productId) {
+    public List<ProductVariant> findAllVariation(Long productId,Integer offset, Integer size) {
 
         Optional<Product> product=productRepository.findById(productId);
 
@@ -146,12 +148,16 @@ public class ProductVariationService {
             throw new ProductNotFoundException("Product does not exist");
 
         if(product.isPresent()) {
+
             if(getLoggedInSeller().getEmail().equals(product.get().getSeller().getEmail())) {
-                return productVariationRepository.findByProductId(productId);
+                return productVariationRepository.findByProductId
+                        (productId, PageRequest.of(offset,size, Sort.Direction.ASC, "product_id"));
             }
+
             else {
                 throw new ProductNotFoundException("User Not authorized");
             }
+
         }
 
         else {
@@ -209,6 +215,7 @@ public class ProductVariationService {
 
                 CategoryMetadataField categoryMetadataField
                         = metadataFieldRepository.findByName(field);
+
                 CategoryMetadataFieldValues categoryMetadataFieldValues
                         = metadataFieldValuesRepository.findMetadataFieldValue
                         (categoryMetadataField.getId(), productVariation.getProduct()

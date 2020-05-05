@@ -21,6 +21,8 @@ public class SellerController {
     @Autowired
     private MessageSource messageSource;
 
+
+
     @PostMapping("/seller/registration")
     public String addSeller(@RequestBody Seller seller,
                             @RequestHeader(name = "Accept-Language",
@@ -29,10 +31,15 @@ public class SellerController {
         return message;
     }
 
-    @GetMapping("/seller/get/all")
-    public List<Seller> getAllSellers() {
-        return sellerService.listAllSeller();
+
+
+    @GetMapping("/seller/get/all/{page}/{size}")
+    public List<Seller> getAllSellers(@PathVariable Integer page,
+                                      @PathVariable Integer size) {
+        return sellerService.listAllSeller(page, size);
     }
+
+
 
     @PutMapping("/seller/update/profile")
     public String editSeller(@RequestBody SellerDto seller,
@@ -42,6 +49,8 @@ public class SellerController {
         return messageSource.getMessage("seller.update.message", null, locale);
     }
 
+
+
     @PutMapping("/seller/update/password")
     public String updatePassword(@RequestBody PasswordDto passwordDto,
                                  @RequestHeader(name = "Accept-Language",
@@ -49,6 +58,8 @@ public class SellerController {
         sellerService.updatePassword(passwordDto,locale);
         return messageSource.getMessage("seller.update.password.message", null, locale);
     }
+
+
 
     @GetMapping("/seller/myProfile")
     public SellerProfileDto myProfile() {

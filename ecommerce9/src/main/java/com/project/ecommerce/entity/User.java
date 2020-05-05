@@ -28,10 +28,8 @@ public class User extends Auditable<String> {
     private String email;
 
     @NotNull
-
 //    @Pattern(regexp = "^[a-zA-Z]{1,20}$",message =
 //            "field first name can only contains alphabets")
-
     private String firstname;
 
     private String middlename;

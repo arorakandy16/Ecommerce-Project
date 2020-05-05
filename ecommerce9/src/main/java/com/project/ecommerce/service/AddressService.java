@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -57,12 +58,12 @@ public class AddressService {
     @Transactional
     public void updateCustomerAddress(Address address, Long addressId,Locale locale) {
         Customer customer=customerService.getLoggedInCustomer();
-        Address address1 = addressRepository.findByUserIdAndAddressId
-                (addressId,customer.getUserid());
-        if(address1.getAddressId()==null)
-            throw new UserNotFoundException("Address with AddressId " +
-                    ""+addressId+" is not associated with user "+customer.getFirstname());
-            address.setAddressId(addressId);
+        Optional<Address> address1 = addressRepository.findByUserIdAndAddressId(addressId,customer.getUserid());
+        if(!address1.isPresent())
+            throw new UserNotFoundException("Address with AddressId "
+                    + addressId +
+                    " is not associated with user " + customer.getFirstname());
+        address.setAddressId(addressId);
             address.setCustomer(customer);
             addressRepository.save(address);
         throw new Message(messageSource.getMessage
@@ -75,12 +76,14 @@ public class AddressService {
     @Transactional
     public void deleteCustomerAddress(Long addressId,Locale locale) {
         Customer customer=customerService.getLoggedInCustomer();
-        Address address1 = addressRepository.findByUserIdAndAddressId
+        Optional<Address> address1 = addressRepository.findByUserIdAndAddressId
                 (addressId,customer.getUserid());
-        if(address1.getAddressId()==null)
-            throw new ValidationException("You can not delete Address with AddressId " +
-                    ""+addressId+" because it is not associated with user "+customer.getFirstname());
-            addressRepository.deleteById(addressId);
+        if(!address1.isPresent())
+            throw new ValidationException
+                    ("You can not delete Address with AddressId "
+                            + addressId +
+                            " because it is not associated with user " + customer.getFirstname());
+        addressRepository.deleteById(addressId);
         throw new Message(messageSource.getMessage
                 ("customer.delete.address.message",null,locale));
     }
@@ -91,12 +94,14 @@ public class AddressService {
     @Transactional
     public void updateSellerAddress(Address address, Long addressId, Locale locale) {
         Seller seller=sellerService.getLoggedInSeller();
-        Address address1 = addressRepository.findBySellerIdAndAddressId
+        Optional<Address> address1 = addressRepository.findBySellerIdAndAddressId
                 (addressId,seller.getUserid());
-        if(address1.getAddressId()==null)
-            throw new ValidationException("Address with AddressId " +
-                    ""+addressId+" " + "is not associated with user "+seller.getFirstname());
-            address.setAddressId(addressId);
+        if(address1.isPresent())
+            throw new ValidationException
+                    ("Address with AddressId "
+                            +addressId+
+                            " is not associated with user "+seller.getFirstname());
+        address.setAddressId(addressId);
             address.setSeller(seller);
             addressRepository.save(address);
 

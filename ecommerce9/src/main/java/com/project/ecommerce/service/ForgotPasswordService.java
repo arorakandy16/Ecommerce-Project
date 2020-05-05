@@ -37,25 +37,39 @@ public class ForgotPasswordService {
     private MessageSource messageSource;
 
 
+
+
+    //  Forgot Password
+
     public String forgotPassword(String email, Locale locale) {
         User user=userRepository.findByUsername(email);
+
         if(user.getEmail()==null)
             throw new UserNotFoundException("User doesn't exist");
+
         if(!user.isIs_active())
             throw new UserNotFoundException("User is not active");
+
         else{
             String token= UUID.randomUUID().toString();
             VerificationToken verificationToken=new VerificationToken();
             verificationToken.setUserEmail(user.getEmail());
             verificationToken.setGeneratedDate(new Date());
             verificationToken.setToken(token);
-            emailService.sendEmail("RESET YOUR PASSWORD","Hii, \nUse this link to reset your password ->" +
+            emailService.sendEmail("RESET YOUR PASSWORD","Hii," +
+                    " \nUse this link to reset your password ->" +
                     " http://localhost:8080/password/reset/"+token,email);
             verificationTokenRepository.save(verificationToken);
         }
         throw new Message(messageSource.getMessage
                 ("forgot.password.message", null, locale));
     }
+
+
+
+
+
+    //  Reset Password
 
     public String resetPassword(PasswordDto passwordDto, String token,Locale locale) {
         VerificationToken verificationToken = verificationTokenRepository.getByToken(token);

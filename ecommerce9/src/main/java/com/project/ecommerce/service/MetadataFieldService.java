@@ -35,10 +35,12 @@ public class MetadataFieldService {
 
     //View All Fields
 
-    public List<MetadataFieldDto> viewAllFields() {
+    public List<MetadataFieldDto> viewAllFields(Integer offset,Integer size) {
+
         List<CategoryMetadataField> categoryMetadataField
                 = metadataFieldRepository.viewAllFields
-                (PageRequest.of(0,10, Sort.Direction.ASC,"id"));
+                (PageRequest.of(offset,size, Sort.Direction.ASC,"id"));
+
         List<MetadataFieldDto> metadataFieldDtos=new ArrayList<>();
 
         for(CategoryMetadataField fields:categoryMetadataField){
@@ -51,6 +53,7 @@ public class MetadataFieldService {
     }
 
 
+
     //Add Field
 
     public String addField(CategoryMetadataField categoryMetadataField, Locale locale) {
@@ -60,7 +63,8 @@ public class MetadataFieldService {
         catch (Exception ex){
             throw new InvalidCategoryOrFieldIdException("Field name already exists");
         }
-        throw new Message(messageSource.getMessage("admin.add.metadata.field.message", null, locale));
+        throw new Message(messageSource.getMessage
+                ("admin.add.metadata.field.message", null, locale));
     }
 
 
@@ -71,40 +75,59 @@ public class MetadataFieldService {
                             Long categoryId, Long fieldId, Locale locale) {
 
         Optional<ProductCategory> productCategory=productCategoryRepository.findById(categoryId);
+
+        if(!productCategory.isPresent())
+            throw new InvalidCategoryOrFieldIdException("Category id is invalid");
+
         Optional<CategoryMetadataField> categoryMetadataField=metadataFieldRepository.findById(fieldId);
 
-        try {
-            ProductCategory productCategory1=productCategory.get();
-            CategoryMetadataField categoryMetadataField1=categoryMetadataField.get();
-            CategoryMetadataFieldValues categoryMetadataFieldValues
-                    =new CategoryMetadataFieldValues(values.getMetadataValues());
-            categoryMetadataFieldValues.setCategoryMetadataField(categoryMetadataField1);
-            categoryMetadataFieldValues.setProductCategory(productCategory1);
-             metadataFieldValuesRepository.save(categoryMetadataFieldValues);
-        }
-        catch (Exception ex){
-            throw new InvalidCategoryOrFieldIdException
-                    ("Invalid Product Category Id or Metadata Field Id");
-        }
-        throw new Message(messageSource.getMessage("admin.add.metadata.values.message", null, locale));
+        if(!categoryMetadataField.isPresent())
+            throw new InvalidCategoryOrFieldIdException("Field id is invalid");
+
+        ProductCategory productCategory1=productCategory.get();
+        CategoryMetadataField categoryMetadataField1=categoryMetadataField.get();
+        CategoryMetadataFieldValues categoryMetadataFieldValues=
+                new CategoryMetadataFieldValues(values.getMetadataValues());
+        categoryMetadataFieldValues.setCategoryMetadataField(categoryMetadataField1);
+        categoryMetadataFieldValues.setProductCategory(productCategory1);
+
+        metadataFieldValuesRepository.save(categoryMetadataFieldValues);
+        throw new Message(messageSource.getMessage
+                ("admin.add.metadata.values.message", null, locale));
     }
+
 
 
     //Update Values
 
-    public String updateValues(CategoryMetadataFieldValues values, Long categoryId, Long fieldId, Locale locale) {
+    public String updateValues(CategoryMetadataFieldValues values,
+                               Long categoryId, Long fieldId, Locale locale) {
         Optional<ProductCategory> productCategory=productCategoryRepository.findById(categoryId);
+
+        if(!productCategory.isPresent())
+            throw new InvalidCategoryOrFieldIdException("Category id is invalid");
+
         Optional<CategoryMetadataField> categoryMetadataField=metadataFieldRepository.findById(fieldId);
-        try {
-            ProductCategory productCategory1=productCategory.get();
-            CategoryMetadataField categoryMetadataField1=categoryMetadataField.get();
-            metadataFieldValuesRepository.updateMetadataValues
-                    (values.getMetadataValues(),categoryMetadataField1.getId(),productCategory1.getPcId());
-        }
-        catch (Exception ex){
-            throw new InvalidCategoryOrFieldIdException("Invalid Product Category Id or Metadata Field Id");
-        }
+
+        if(!categoryMetadataField.isPresent())
+            throw new InvalidCategoryOrFieldIdException("Field id is invalid");
+
+        Optional<CategoryMetadataFieldValues> categoryMetadataFieldValues =
+                metadataFieldValuesRepository.findByCategoryAndFieldId(categoryId,fieldId);
+
+        if (!categoryMetadataFieldValues.isPresent())
+            throw new InvalidCategoryOrFieldIdException
+                    ("There is no value to update for this category and field id");
+
+        ProductCategory productCategory1=productCategory.get();
+        CategoryMetadataField categoryMetadataField1=categoryMetadataField.get();
+
+        metadataFieldValuesRepository.updateMetadataValues
+                (values.getMetadataValues(),
+                        categoryMetadataField1.getId(),productCategory1.getPcId());
         throw new Message(messageSource.getMessage
                 ("admin.update.metadata.values.message", null, locale));
     }
+
+
 }

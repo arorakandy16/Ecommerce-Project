@@ -19,18 +19,19 @@ public class ProductCategoryController {
 
 
 
+    @GetMapping("/category/view/all/{page}/{size}")
+    public List<ProductCategory> viewAll(@PathVariable Integer page, @PathVariable Integer size) {
+        return categoryService.getAll(page, size);
+    }
+
+
+
+
     @PostMapping("/admin/category/add")
     public String addCategory(@RequestBody ProductCategory productCategory,
                               @RequestHeader(name = "Accept-Language",
                                       required = false) Locale locale){
         return categoryService.addCategory(productCategory,locale);
-    }
-
-
-
-    @GetMapping("/category/view/all")
-    public List<ProductCategory> viewAll(){
-       return categoryService.getAll();
     }
 
 

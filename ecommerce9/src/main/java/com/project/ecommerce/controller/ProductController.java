@@ -43,11 +43,11 @@ public class ProductController {
 
 
 
-    @GetMapping("/seller/product/view/all")
-    public List<Product> viewAllProductAsSeller(){
-        return productService.viewAllProductAsSeller();
+    @GetMapping("/seller/product/view/all/{page}/{size}")
+    public List<Product> viewAllProductAsSeller(@PathVariable Integer page,
+                                                @PathVariable Integer size){
+        return productService.viewAllProductAsSeller(page, size);
     }
-
 
 
 
@@ -76,9 +76,11 @@ public class ProductController {
 
 
 
-    @GetMapping("/customer/product/view/all/{categoryId}")
-    public List<Product> viewAllProductAsCustomer(@PathVariable Long categoryId){
-        return productService.viewAllProductsAsCustomer(categoryId);
+    @GetMapping("/customer/product/view/all/{categoryId}/{page}/{size}")
+    public List<Product> viewAllProductAsCustomer(@PathVariable Long categoryId,
+                                                  @PathVariable Integer page,
+                                                  @PathVariable Integer size){
+        return productService.viewAllProductsAsCustomer(categoryId, page, size);
     }
 
 
@@ -90,9 +92,11 @@ public class ProductController {
 
 
 
-    @GetMapping("/admin/product/view/all/{categoryId}")
-    public List<Product> viewAllProductAsAdmin(@PathVariable Long categoryId){
-        return productService.viewAllProductsAsAdmin(categoryId);
+    @GetMapping("/admin/product/view/all/{categoryId}/{page}/{size}")
+    public List<Product> viewAllProductAsAdmin(@PathVariable Long categoryId,
+                                               @PathVariable Integer page,
+                                               @PathVariable Integer size){
+        return productService.viewAllProductsAsAdmin(categoryId,page,size);
     }
 
 
@@ -132,9 +136,12 @@ public class ProductController {
 
 
 
-    @GetMapping("/seller/product/variation/views/{productId}")
-    public List<ProductVariant> getAllProductVariation(@PathVariable Long productId){
-        return productVariationService.findAllVariation(productId);
+    @GetMapping("/seller/product/variation/views/{productId}/{page}/{size}")
+    public List<ProductVariant> getAllProductVariation
+            (@PathVariable Long productId,
+             @PathVariable Integer page,
+             @PathVariable Integer size){
+        return productVariationService.findAllVariation(productId, page, size);
     }
 
 
@@ -151,8 +158,12 @@ public class ProductController {
 
 
 
-    @GetMapping("/customer/product/view/similar/{productId}")
-    public List<Product> similarProductVariation(@PathVariable Long productId){
-        return productService.similarProductVariation(productId);
+    @GetMapping("/customer/product/view/similar/{productId}/{page}/{size}")
+    public List<Product> similarProductVariation
+            (@PathVariable Long productId,
+             @PathVariable Integer page,
+             @PathVariable Integer size){
+        return productService.similarProductVariation(productId, page, size);
     }
+
 }

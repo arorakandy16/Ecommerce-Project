@@ -1,12 +1,13 @@
 package com.project.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.ecommerce.auditing.Auditable;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class CategoryMetadataFieldValues implements Serializable {
+public class CategoryMetadataFieldValues extends Auditable<String> implements Serializable {
 
         @JsonIgnore
         @EmbeddedId

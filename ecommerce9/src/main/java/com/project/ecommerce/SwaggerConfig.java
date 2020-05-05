@@ -15,14 +15,29 @@ import java.util.ArrayList;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    //Swagger documentation is used for the description of each class and URI so that in swagger UI the purpose of class and URI is clear.
-    public static final Contact DEFAULT_CONTACT = new Contact("Kandy Arora", "tothenew.com", "kandyarora4047@gmail.com");
-    public static final ApiInfo DEFAULT_API_INFO = new ApiInfo("Api Documentation", "Api Documentation", "1.0", "urn:tos",
-            DEFAULT_CONTACT, "Apache 2.0", "http://www.apache.org/licenses/LICENSE-2.0", new ArrayList<VendorExtension>());
+    //Swagger documentation is used for the description of each class and
+    // URI so that in swagger UI the purpose of class and URI is clear.
+
+    public static final Contact DEFAULT_CONTACT = new Contact(
+            "Kandy Arora",
+            "instagram.com/_kandyarora_/",
+            "kandyarora4047@gmail.com");
+
+    public static final ApiInfo DEFAULT_API_INFO = new ApiInfo(
+            "Api Documentation",
+            "Api Documentation",
+            "1.0",
+            "urn:tos", DEFAULT_CONTACT,
+            "Apache 2.0",
+            "http://www.apache.org/licenses/LICENSE-2.0",
+            new ArrayList<VendorExtension>());
 
 
-    //Bean-Docket(in this i want to tell i will use swagger2
-    //Docket is already defined in springfox-swagger2 documentation
+
+    //Bean-Docket(In this I want to tell I will use
+    // swagger2 Docket is already defined in
+    // springfox-swagger2 documentation
+
     @Bean
     public Docket api(){
         return new Docket(DocumentationType.SWAGGER_2)

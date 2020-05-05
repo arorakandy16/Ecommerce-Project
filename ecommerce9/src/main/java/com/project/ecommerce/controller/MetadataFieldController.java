@@ -28,9 +28,10 @@ public class MetadataFieldController {
 
 
 
-    @GetMapping("/admin/field/view/all")
-    public List<MetadataFieldDto> viewFields(){
-        return metadataFieldService.viewAllFields();
+    @GetMapping("/admin/field/view/all/{page}/{size}")
+    public List<MetadataFieldDto> viewFields
+            (@PathVariable Integer page, @PathVariable Integer size){
+        return metadataFieldService.viewAllFields(page,size);
     }
 
 

@@ -17,10 +17,12 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
     Optional<Product> findByIdAndSellerId
             (@Param("userId") Long userId, @Param("productId") Long productId);
 
+
     @Query(value = "select * from product " +
             "where seller_user_id=:userId and is_deleted=false", nativeQuery = true)
     List<Product> findAllBySeller
             (@Param("userId") Long userId , Pageable pageable);
+
 
     @Query(value = "select * from product " +
             "where category_id=:categoryId and is_deleted = false " +
@@ -28,15 +30,24 @@ public interface ProductRepository extends CrudRepository<Product,Long> {
     List<Product> findAllByCategoryIdForCustomerAdmin
             (@Param("categoryId") Long categoryId, Pageable pageable);
 
+
     @Transactional
     @Modifying
     @Query(value = "update Product set is_active=:is_active where productId=:productId")
     void isActivateProduct(@Param("productId") Long productId,
                            @Param("is_active") boolean is_active);
 
+
     @Transactional
     @Modifying
     @Query(value = "update Product set is_deleted " +
             "= true where productId=:id")
     void deleteProduct(@Param("id") Long id);
+
+
+    @Query(value = "select * from product where category_id=:categoryId " +
+            "and is_deleted = false and is_active=true", nativeQuery = true)
+    List<Product> findAllByCategoryId
+            (@Param("categoryId") Long categoryId);
+
 }

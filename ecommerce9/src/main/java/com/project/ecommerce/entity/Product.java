@@ -1,13 +1,14 @@
 package com.project.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.ecommerce.auditing.Auditable;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
-public class Product {
-
+public class Product extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;

@@ -1,35 +1,36 @@
 package com.project.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.ecommerce.auditing.Auditable;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 
 @Entity
-public class Address {
+public class Address extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long addressId;
 
     @NotNull
-//    @Pattern(regexp = "^[a-zA-Z]{1,20}$",message = "field city can only contains alphabets")
+    @Pattern(regexp = "^[a-zA-Z]{1,20}$",message = "field city can only contains alphabets")
     private String city;
 
     @NotNull
-//    @Pattern(regexp = "^[a-zA-Z]{1,20}$",message = "field state can only contains alphabets")
+    @Pattern(regexp = "^[a-zA-Z]{1,20}$",message = "field state can only contains alphabets")
     private String state;
 
     @NotNull
-//    @Pattern(regexp = "^[a-zA-Z]{1,20}$",message = "field country can only contains alphabets")
+    @Pattern(regexp = "^[a-zA-Z]{1,20}$",message = "field country can only contains alphabets")
     private String country;
 
     @NotNull
     private String address;
 
     @NotNull
-    //    @Pattern(regexp = "^[0-9]{1,6}$",message = "field zipcode can only contains numeric")
+    @Pattern(regexp = "^[0-9]{1,6}$",message = "field zipcode can only contains numeric")
     private String zipcode;
 
     private String Label;

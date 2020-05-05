@@ -34,10 +34,11 @@ public class CustomerController {
 
 
 
-    @GetMapping("/customer/get/all")
-    public List<Customer> getAllCustomers() {
-        return customerService.listAllCustomers();
-
+    @GetMapping("/customer/get/all/{page}/{size}")
+    public List<Customer> getAllCustomers
+            (@PathVariable Integer page,
+             @PathVariable Integer size) {
+        return customerService.listAllCustomers(page,size);
     }
 
 

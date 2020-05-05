@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 public interface MetadataFieldValuesRepository extends CrudRepository<CategoryMetadataFieldValues,Long>{
 
@@ -16,15 +17,23 @@ public interface MetadataFieldValuesRepository extends CrudRepository<CategoryMe
             "set metadata_values=:value " +
             "where  category_id=:productCategory " +
             "and category_metadata_field_id=:categoryMetadataField ",nativeQuery = true)
-
     void updateMetadataValues
             (@Param("value") String value,@Param
                     ("categoryMetadataField") Long categoryMetadataField,@Param
                     ("productCategory") Long productCategory);
+
 
     @Query(value = "select * from category_metadata_field_values " +
             "where category_metadata_field_id=:fieldId " +
             "AND category_id=:categoryId ",nativeQuery = true)
     CategoryMetadataFieldValues findMetadataFieldValue
             (@Param("fieldId")Long fieldId,@Param("categoryId")Long categoryId);
+
+
+    @Query(value = "select * from category_metadata_field_values " +
+            "where category_id=:categoryId and " +
+            "category_metadata_field_id=:fieldId ", nativeQuery = true)
+    Optional<CategoryMetadataFieldValues> findByCategoryAndFieldId
+            (@Param("categoryId") Long categoryId, @Param("fieldId") Long fieldId);
+
 }

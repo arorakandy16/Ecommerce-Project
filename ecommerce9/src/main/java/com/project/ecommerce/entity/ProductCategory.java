@@ -1,14 +1,16 @@
 package com.project.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.ecommerce.auditing.Auditable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class ProductCategory {
+public class ProductCategory extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +19,8 @@ public class ProductCategory {
 
     @NotNull
     @Column(unique = true)
-    //@Pattern(regexp = "^[a-zA-Z]{1,50}$",
-    // message = "field category name can only contains alphabets")
+//    @Pattern(regexp = "^[a-zA-Z]{1,50}$",
+//     message = "field category name can only contains alphabets")
     private String name;
 
 

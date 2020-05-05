@@ -75,11 +75,16 @@ public class ProductService {
             throw new ProductNotFoundException("Product does not exist");
     }
 
-    public List<Product> viewAllProductAsSeller() {
+
+
+    // View All Products As Seller
+
+    public List<Product> viewAllProductAsSeller(Integer offset,Integer size) {
         Seller seller = sellerService.getLoggedInSeller();
-        return productRepository.findAllBySeller(seller.getUserid(),
-                PageRequest.of(0, 10,
-                        Sort.Direction.ASC, "product_id"));
+        return productRepository.findAllBySeller
+                (seller.getUserid(),
+                        PageRequest.of
+                                (offset, size, Sort.Direction.ASC, "product_id"));
     }
 
 
@@ -105,20 +110,26 @@ public class ProductService {
     @Transactional
     public void updateProduct(Long productId,ProductDto productDto,Locale locale) {
         Seller seller = sellerService.getLoggedInSeller();
-        Optional<Product> product = productRepository.findByIdAndSellerId(productId, seller.getUserid());
+        Optional<Product> product = productRepository.findByIdAndSellerId
+                (productId, seller.getUserid());
         if(!product.isPresent())
             throw new ProductNotFoundException("Product does not exist");
 
         if (productDto.getBrand() != null)
             product.get().setBrand(productDto.getBrand());
+
         if (productDto.getDescription() != null)
             product.get().setDescription(productDto.getDescription());
+
         if (productDto.getProductName() != null)
             product.get().setProductName(productDto.getProductName());
+
         if (productDto.isIs_cancellable())
             product.get().setIs_cancellable(productDto.isIs_cancellable());
+
         if (productDto.isIs_returnable())
             product.get().setIs_returnable(productDto.isIs_returnable());
+
         Product product1 = product.get();
         productRepository.save(product1);
 
@@ -143,8 +154,12 @@ public class ProductService {
 
     //View All Products as Customer
 
-    public List<Product> viewAllProductsAsCustomer(Long categoryId) {
-        List<Product> products=productRepository.findAllByCategoryIdForCustomerAdmin(categoryId, PageRequest.of(0, 10, Sort.Direction.ASC, "product_id"));
+    public List<Product> viewAllProductsAsCustomer(Long categoryId,Integer offset,Integer size) {
+        List<Product> products=productRepository
+                .findAllByCategoryIdForCustomerAdmin
+                        (categoryId, PageRequest.of
+                                ( offset, size, Sort.Direction.ASC, "product_id"));
+
         if (products.isEmpty())
             throw new ProductNotFoundException("Invalid Category Id");
         return products;
@@ -153,7 +168,8 @@ public class ProductService {
 
 
 
-    //View Product as Admin
+
+    //View a Product as Admin
 
     public Optional<Product> viewAProductAsAdmin(Long productId) {
         Optional<Product> product = productRepository.findById(productId);
@@ -167,8 +183,13 @@ public class ProductService {
 
     //View All Products as Admin
 
-    public List<Product> viewAllProductsAsAdmin(Long categoryId) {
-        List<Product> products=productRepository.findAllByCategoryIdForCustomerAdmin(categoryId, PageRequest.of(0, 10, Sort.Direction.ASC, "product_id","seller_user_id"));
+    public List<Product> viewAllProductsAsAdmin(Long categoryId, Integer offset, Integer size) {
+        List<Product> products=productRepository
+                .findAllByCategoryIdForCustomerAdmin
+                        (categoryId, PageRequest.of
+                                (offset, size, Sort.Direction.ASC,
+                                        "product_id","seller_user_id"));
+
         if (products.isEmpty())
             throw new ProductNotFoundException("Invalid Category Id");
         return products;
@@ -234,7 +255,7 @@ public class ProductService {
 
     //Similar Product Variation
 
-    public List<Product> similarProductVariation(Long productId) {
+    public List<Product> similarProductVariation(Long productId,Integer offset,Integer size) {
         Optional<Product> product = productRepository.findById(productId);
 
         if(!product.isPresent())
@@ -246,14 +267,14 @@ public class ProductService {
         if(product.get().isIs_deleted())
             throw new ProductNotFoundException("Product Id is not valid");
 
-        Optional<ProductCategory> productCategory
-                = productCategoryRepository.findById
-                (product.get().getProductcategory().getPcId());
+        Optional<ProductCategory> productCategory =
+                productCategoryRepository.findById
+                        (product.get().getProductcategory().getPcId());
 
-        List<Product> products
-                = productRepository.findAllByCategoryIdForCustomerAdmin
-                (productCategory.get().getPcId(),
-                        PageRequest.of(0, 10, Sort.Direction.ASC, "product_id"));
+        List<Product> products = productRepository
+                .findAllByCategoryIdForCustomerAdmin
+                        (productCategory.get().getPcId(), PageRequest.of
+                                (offset,size, Sort.Direction.ASC, "product_id"));
         return products;
     }
 }

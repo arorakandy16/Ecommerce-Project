@@ -1,12 +1,13 @@
 package com.project.ecommerce.entity;
 
+import com.project.ecommerce.auditing.Auditable;
 import com.project.ecommerce.metadata.HashMapConverter;
 import javax.persistence.*;
 import java.io.File;
 import java.util.Map;
 
 @Entity
-public class  ProductVariant {
+public class  ProductVariant extends Auditable<String> {
 
 
     @Id

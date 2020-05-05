@@ -6,10 +6,7 @@ import com.project.ecommerce.entity.CategoryMetadataFieldValues;
 import com.project.ecommerce.entity.Product;
 import com.project.ecommerce.entity.ProductCategory;
 import com.project.ecommerce.entity.ProductVariant;
-import com.project.ecommerce.exception.CategoryAlreadyRegistered;
-import com.project.ecommerce.exception.InvalidCategoryOrFieldIdException;
-import com.project.ecommerce.exception.Message;
-import com.project.ecommerce.exception.ProductNotFoundException;
+import com.project.ecommerce.exception.*;
 import com.project.ecommerce.repository.MetadataFieldValuesRepository;
 import com.project.ecommerce.repository.ProductCategoryRepository;
 import com.project.ecommerce.repository.ProductRepository;
@@ -43,9 +40,17 @@ public class ProductCategoryService {
 
     //Get All Product Category
 
-    public List<ProductCategory> getAll() {
-        return productCategoryRepository.getAll(PageRequest.of
-                (0, 10, Sort.Direction.ASC, "pc_id"));
+    public List<ProductCategory> getAll(Integer offset,Integer size) {
+
+        if (offset==null)
+            offset=0;
+
+        if (size==null)
+            size=1000;
+
+        return productCategoryRepository.getAll
+                (PageRequest.of
+                        ( offset,size, Sort.Direction.ASC, "pc_id"));
     }
 
 
@@ -53,11 +58,10 @@ public class ProductCategoryService {
     //Add Category
 
     public String addCategory(ProductCategory productCategory, Locale locale) {
-        try{
+        try {
             productCategoryRepository.save(productCategory);
-        }
-        catch (Exception ex){
-            throw new CategoryAlreadyRegistered( "Category Name Already Registered");
+        } catch (Exception ex) {
+            throw new CategoryAlreadyRegistered("Category Name Already Registered");
         }
         throw new Message(messageSource.getMessage
                 ("admin.add.category.message", null, locale));
@@ -69,10 +73,9 @@ public class ProductCategoryService {
 
     public Optional<ProductCategory> getACategory(Long id) {
         Optional<ProductCategory> productCategory = productCategoryRepository.findById(id);
-        try{
-            ProductCategory product1=productCategory.get();
-        }
-        catch (Exception ex){
+        try {
+            ProductCategory product1 = productCategory.get();
+        } catch (Exception ex) {
             throw new ProductNotFoundException("Category Id is Invalid");
         }
         return productCategory;
@@ -80,17 +83,18 @@ public class ProductCategoryService {
     }
 
 
-
     //Update Category
 
     public String updateCategory(Long id, ProductCategory name, Locale locale) {
         Optional<ProductCategory> productCategory = productCategoryRepository.findById(id);
-        try{
-            ProductCategory productCategory1=productCategory.get();
+        Optional<ProductCategory> productCategory2 = productCategoryRepository.findByName(name.getName());
+        if (productCategory2.isPresent())
+            throw new ValidationException("Category name already exists");
+        try {
+            ProductCategory productCategory1 = productCategory.get();
             productCategory1.setName(name.getName());
             productCategoryRepository.save(productCategory1);
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             throw new ProductNotFoundException("Category Id is Invalid");
         }
         throw new Message(messageSource.getMessage
@@ -98,108 +102,110 @@ public class ProductCategoryService {
     }
 
 
-
     //View All Categories By Customer
 
     public List<CategoryDto> viewAllCategoriesByCustomer(Long id) {
-        if(id==null){
-            List<CategoryDto> categoryDtos=new ArrayList<>();
-            List<ProductCategory> productCategories=productCategoryRepository.getAllRoot();
-            for(ProductCategory productCategory : productCategories){
-                CategoryDto categoryDto=new CategoryDto();
+        if (id == null) {
+            List<CategoryDto> categoryDtos = new ArrayList<>();
+            List<ProductCategory> productCategories = productCategoryRepository.getAllRoot();
+            for (ProductCategory productCategory : productCategories) {
+                CategoryDto categoryDto = new CategoryDto();
                 categoryDto.setPcId(productCategory.getPcId());
                 categoryDto.setName(productCategory.getName());
                 categoryDtos.add(categoryDto);
             }
             return categoryDtos;
-        }
-
-        else {
-            List<CategoryDto> categoryDtos=new ArrayList<>();
+        } else {
+            List<CategoryDto> categoryDtos = new ArrayList<>();
             try {
-                List<ProductCategory> productCategories=productCategoryRepository.getAllChild(id);
-                if(productCategories.get(0).getPcId() !=null){
-                    for(ProductCategory productCategory : productCategories){
-                    CategoryDto categoryDto=new CategoryDto();
-                    categoryDto.setPcId(productCategory.getPcId());
-                    categoryDto.setName(productCategory.getName());
-                    categoryDtos.add(categoryDto);
+                List<ProductCategory> productCategories = productCategoryRepository.getAllChild(id);
+                if (productCategories.get(0).getPcId() != null) {
+                    for (ProductCategory productCategory : productCategories) {
+                        CategoryDto categoryDto = new CategoryDto();
+                        categoryDto.setPcId(productCategory.getPcId());
+                        categoryDto.setName(productCategory.getName());
+                        categoryDtos.add(categoryDto);
                     }
                 }
-            }
-            catch (Exception ex){
+            } catch (Exception ex) {
                 throw new InvalidCategoryOrFieldIdException
-                        ("Either Category Id is not valid or" +
-                        " This Id is not associated with any child category");
+                        ("Either Category Id is not valid "
+                                + "or" +
+                                " This Id is not associated with any child category");
             }
             return categoryDtos;
         }
     }
-
 
 
     //Filter Category By Customer
 
     public FilterCategoryDto filterCategoryByCustomer(Long categoryId) {
 
-        FilterCategoryDto filterCategoryDto=new FilterCategoryDto();
+        List<Product> productList = productRepository.findAllByCategoryId(categoryId);
 
-        List<CategoryMetadataFieldValues> categoryFieldValuesList=new ArrayList<>();
+        if (productList.isEmpty())
+            throw new ProductNotFoundException("There is no product related to this category");
 
-        Iterator<CategoryMetadataFieldValues> categoryFieldValuesIterator
-                = metadataFieldValuesRepository.findAll().iterator();
+        FilterCategoryDto filterCategoryDto = new FilterCategoryDto();
+
+        List<CategoryMetadataFieldValues> categoryFieldValuesList = new ArrayList<>();
+
+        Iterator<CategoryMetadataFieldValues> categoryFieldValuesIterator = metadataFieldValuesRepository.findAll().iterator();
 
         while (categoryFieldValuesIterator.hasNext()) {
-            CategoryMetadataFieldValues currentCategoryFieldValues
-                    =categoryFieldValuesIterator.next();
+            CategoryMetadataFieldValues currentCategoryFieldValues = categoryFieldValuesIterator.next();
 
-            if (currentCategoryFieldValues.getId().getCategoryId()==categoryId) {
+            if (currentCategoryFieldValues.getId().getCategoryId() == categoryId) {
                 categoryFieldValuesList.add(currentCategoryFieldValues);
             }
         }
 
-        Integer max=Integer.MIN_VALUE;
-        Integer min=Integer.MAX_VALUE;
+        Integer max = Integer.MIN_VALUE;
 
-        Set<String> brandsList=new HashSet<>();
+        Integer min = Integer.MAX_VALUE;
 
-        Iterator<Product> productIterator
-                = productRepository.findAllByCategoryIdForCustomerAdmin
-                (categoryId,PageRequest.of
-                        (0, 10, Sort.Direction.ASC, "product_id")).iterator();
+        Set<String> brandsList = new HashSet<>();
+
+        Iterator<Product> productIterator = productRepository
+                .findAllByCategoryId(categoryId).iterator();
 
         while (productIterator.hasNext()) {
+
             Product currentProduct = productIterator.next();
 
             if (currentProduct.getProductcategory().getPcId() == categoryId) {
+
                 brandsList.add(currentProduct.getBrand());
 
-                Iterator<ProductVariant> productVariantIterator
-                        = productVariationRepository.findByProductId
-                        (currentProduct.getProductId()).iterator();
+                Iterator<ProductVariant> productVariantIterator =
+                        productVariationRepository
+                                .findByProductIdWithoutPaging
+                                        (currentProduct.getProductId()).iterator();
 
                 while (productVariantIterator.hasNext()) {
+
                     ProductVariant currentVariant = productVariantIterator.next();
+
                     if (currentVariant.getPrice() <= min)
                         min = currentVariant.getPrice().intValue();
+
                     if (currentVariant.getPrice() >= max)
                         max = currentVariant.getPrice().intValue();
+
                 }
             }
         }
 
         filterCategoryDto.setCategoryFieldValues(categoryFieldValuesList);
 
-        if (max>0)
+        if (max > 0)
             filterCategoryDto.setMaxPrice(max);
 
-        if(min<Integer.MAX_VALUE)
-
+        if (min < Integer.MAX_VALUE)
             filterCategoryDto.setMinPrice(min);
 
         filterCategoryDto.setBrandsList(brandsList);
-
         return filterCategoryDto;
     }
 }
-

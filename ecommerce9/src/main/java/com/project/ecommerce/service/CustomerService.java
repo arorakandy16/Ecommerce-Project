@@ -67,6 +67,17 @@ public class CustomerService {
     }
 
 
+
+    // Get All Customers
+
+    public List<Customer> listAllCustomers(Integer offset,Integer size){
+        return customerRepository.findAllCustomer
+                (PageRequest.of
+                        (offset,size, Sort.Direction.ASC,"user_id"));
+    }
+
+
+
     //Add new Customer
 
     public String addCustomer(Customer user, Locale locale) {
@@ -102,9 +113,6 @@ public class CustomerService {
         return messageSource.getMessage("customer.add.message", null, locale);
     }
 
-    public List<Customer> listAllCustomers(){
-        return customerRepository.findAllCustomer(PageRequest.of(0,10, Sort.Direction.ASC,"user_id"));
-    }
 
 
     //Update Customer

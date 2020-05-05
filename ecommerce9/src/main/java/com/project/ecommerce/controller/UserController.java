@@ -26,10 +26,10 @@ public class UserController {
     private MessageSource messageSource;
 
 
-
-    @GetMapping("/user/get/all")
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsers();
+    @GetMapping("/user/get/all/{page}/{size}")
+    public List<UserDto> getAllUsers
+            (@PathVariable Integer page, @PathVariable Integer size){
+        return userService.getAllUsers(page, size);
     }
 
 
@@ -38,7 +38,7 @@ public class UserController {
     public String addAdmin(@RequestBody Admin user,
                            @RequestHeader(name = "Accept-Language",
                                    required = false) Locale locale) {
-        userService.addUser(user);
+        userService.addUser(user,locale);
         return messageSource.getMessage("admin.add.message", null, locale);
     }
 
@@ -77,7 +77,5 @@ public class UserController {
         String message = userService.deActivateUser(id,locale);
         return message;
     }
-
-
 
 }

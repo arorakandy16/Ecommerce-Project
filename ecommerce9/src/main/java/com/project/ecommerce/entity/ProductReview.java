@@ -1,9 +1,11 @@
 package com.project.ecommerce.entity;
 
+import com.project.ecommerce.auditing.Auditable;
+
 import javax.persistence.*;
 
 @Entity
-public class ProductReview {
+public class ProductReview extends Auditable<String> {
 
 
     @Id

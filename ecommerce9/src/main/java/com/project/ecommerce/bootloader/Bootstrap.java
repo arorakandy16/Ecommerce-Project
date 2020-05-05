@@ -44,7 +44,7 @@ public class Bootstrap implements ApplicationRunner {
 
         //saving the admin
 
-        Admin admin1 = new Admin("kandy@tothenew.com", "Kandy", "", "Arora");
+        Admin admin1 = new Admin("kandyarora4047@gmail.com", "Kandy", "", "Arora");
         admin1.setPassword(passwordEncoder.encode("Kandy@2145"));
         admin1.setIs_active(true);
 

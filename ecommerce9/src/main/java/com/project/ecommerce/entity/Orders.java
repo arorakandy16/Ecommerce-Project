@@ -1,10 +1,12 @@
 package com.project.ecommerce.entity;
 
+import com.project.ecommerce.auditing.Auditable;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Orders {
+public class Orders extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

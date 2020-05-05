@@ -7,8 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductCategoryRepository extends CrudRepository<ProductCategory,Long> {
+
+    Optional<ProductCategory> findByName(String name);
 
     @Query(value = "from ProductCategory")
     List<ProductCategory> getAll(Pageable pageable);
