@@ -26,9 +26,10 @@ public class UserController {
     private MessageSource messageSource;
 
 
-    @GetMapping("/user/get/all/{page}/{size}")
+    @GetMapping("/user/get/all")
     public List<UserDto> getAllUsers
-            (@PathVariable Integer page, @PathVariable Integer size){
+            (@RequestParam Integer page,
+             @RequestParam Integer size){
         return userService.getAllUsers(page, size);
     }
 

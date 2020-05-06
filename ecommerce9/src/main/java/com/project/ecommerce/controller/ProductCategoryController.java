@@ -19,8 +19,9 @@ public class ProductCategoryController {
 
 
 
-    @GetMapping("/category/view/all/{page}/{size}")
-    public List<ProductCategory> viewAll(@PathVariable Integer page, @PathVariable Integer size) {
+    @GetMapping("/category/view/all")
+    public List<ProductCategory> viewAll
+            (@RequestParam Integer page, @RequestParam Integer size) {
         return categoryService.getAll(page, size);
     }
 
@@ -53,7 +54,7 @@ public class ProductCategoryController {
 
 
 
-    @GetMapping("/customer/category/view/all")
+    @GetMapping("/customer/category/view/all")//
     public List<CategoryDto> viewAllCategoriesByCustomer(){
         return categoryService.viewAllCategoriesByCustomer(null);
     }

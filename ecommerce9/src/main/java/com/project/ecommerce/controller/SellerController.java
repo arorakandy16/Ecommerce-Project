@@ -33,9 +33,9 @@ public class SellerController {
 
 
 
-    @GetMapping("/seller/get/all/{page}/{size}")
-    public List<Seller> getAllSellers(@PathVariable Integer page,
-                                      @PathVariable Integer size) {
+    @GetMapping("/seller/get/all")
+    public List<Seller> getAllSellers(@RequestParam Integer page,
+                                      @RequestParam Integer size) {
         return sellerService.listAllSeller(page, size);
     }
 

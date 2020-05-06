@@ -66,9 +66,9 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
                 //-----------------------Admin APIs---------------------------------------------------------
 
-                .antMatchers("/user/get/all/{page}/{size}").hasAnyRole("ADMIN")
-                .antMatchers("/customer/get/all/{page}/{size}").hasAnyRole("ADMIN")
-                .antMatchers("/seller/get/all/{page}/{size}").hasAnyRole("ADMIN")
+                .antMatchers("/user/get/all").hasAnyRole("ADMIN")
+                .antMatchers("/customer/get/all").hasAnyRole("ADMIN")
+                .antMatchers("/seller/get/all").hasAnyRole("ADMIN")
                 .antMatchers("/user/activate-account/{email}").hasAnyRole("ADMIN")
                 .antMatchers("/user/de-activate-account/{email}").hasAnyRole("ADMIN")
 
@@ -98,13 +98,14 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 //-----------------------Category APIs------------------------------------------------------
 
                 .antMatchers("/admin/add/metadata/field").hasAnyRole("ADMIN")
-                .antMatchers("/admin/field/view/all/{page}/{size}").hasAnyRole("ADMIN")
+                .antMatchers("/admin/field/view/all").hasAnyRole("ADMIN")
                 .antMatchers("/admin/category/add").hasAnyRole("ADMIN")
                 .antMatchers("/admin/category/view/{id}").hasAnyRole("ADMIN")
-                .antMatchers("/category/view/all/{page}/{size}").hasAnyRole("ADMIN","SELLER")
+                .antMatchers("/category/view/all").hasAnyRole("ADMIN","SELLER")
                 .antMatchers("/admin/category/update/{id}").hasAnyRole("ADMIN")
                 .antMatchers("/admin/add/metadata/values/{categoryId}/{fieldId}").hasAnyRole("ADMIN")
                 .antMatchers("/admin/update/metadata/values/{categoryId}/{fieldId}").hasAnyRole("ADMIN")
+                //
                 .antMatchers("/customer/category/view/all").hasAnyRole("CUSTOMER")
                 .antMatchers("/customer/category/view/{id}").hasAnyRole("CUSTOMER")
 
@@ -115,16 +116,16 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/seller/product/variation/views/{productId}").hasRole("SELLER")
                 .antMatchers("/seller/product/variation/view/{variationId}").hasRole("SELLER")
                 .antMatchers("/seller/product/view/all").hasRole("SELLER")
-                .antMatchers("/seller/product/variation/views/{productId}/{page}/{size}").hasRole("SELLER")
+                .antMatchers("/seller/product/variation/views/{productId}").hasRole("SELLER")
                 .antMatchers("/seller/product/delete/{productId}").hasRole("SELLER")
                 .antMatchers("/seller/product/variation/update/{variationId}").hasRole("SELLER")
                 .antMatchers("/seller/product/update/{productId}").hasRole("SELLER")
                 .antMatchers("/customer/product/view/{productId}").hasRole("CUSTOMER")
-                .antMatchers("/customer/product/view/all/{categoryId}/{page}/{size}").hasRole("CUSTOMER")
+                .antMatchers("/customer/product/view/all/{categoryId}").hasRole("CUSTOMER")
                 .antMatchers("/customer/product/view/similar/{productId}").hasRole("CUSTOMER")
-                .antMatchers("/customer/product/view/{productId}/{page}/{size}").hasRole("CUSTOMER")
+                .antMatchers("/customer/product/view/{productId}").hasRole("CUSTOMER")
                 .antMatchers("/admin/product/view/{productId}").hasRole("ADMIN")
-                .antMatchers("/admin/product/view/all/{categoryId}/{page}/{size}").hasRole("ADMIN")
+                .antMatchers("/admin/product/view/all/{categoryId}").hasRole("ADMIN")
                 .antMatchers("/admin/product/de-activate/{productId}").hasRole("ADMIN")
                 .antMatchers("/admin/product/activate/{productId}").hasRole("ADMIN")
 
