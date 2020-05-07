@@ -38,15 +38,16 @@ public class ProductCategoryService {
     private MessageSource messageSource;
 
 
+
     //Get All Product Category
 
-    public List<ProductCategory> getAll(Integer offset,Integer size) {
+    public List<ProductCategory> getAll(Integer offset, Integer size) {
 
         if (offset==null)
             offset=0;
 
         if (size==null)
-            size=1000;
+            size=10;
 
         return productCategoryRepository.getAll
                 (PageRequest.of

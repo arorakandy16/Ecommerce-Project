@@ -22,15 +22,16 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
     public void onApplicationEvent(AbstractAuthenticationEvent appEvent)
     {
 
-        if (appEvent instanceof AuthenticationSuccessEvent)
-        {
+        if (appEvent instanceof AuthenticationSuccessEvent) {
+
             AuthenticationSuccessEvent event = (AuthenticationSuccessEvent) appEvent;
             // add code here to handle successful login event
         }
 
-        if (appEvent instanceof AuthenticationFailureBadCredentialsEvent)
-        {
-            AuthenticationFailureBadCredentialsEvent event = (AuthenticationFailureBadCredentialsEvent) appEvent;
+        if (appEvent instanceof AuthenticationFailureBadCredentialsEvent) {
+
+            AuthenticationFailureBadCredentialsEvent event =
+                    (AuthenticationFailureBadCredentialsEvent) appEvent;
 
             // add code here to handle unsuccessful login event
             // for example, counting the number of login failure attempts and storing it in db

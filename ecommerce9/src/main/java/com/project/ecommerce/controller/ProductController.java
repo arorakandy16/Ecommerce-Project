@@ -44,9 +44,12 @@ public class ProductController {
 
 
     @GetMapping("/seller/product/view/all")
-    public List<Product> viewAllProductAsSeller(@RequestParam Integer page,
-                                                @RequestParam Integer size){
-        return productService.viewAllProductAsSeller(page, size);
+    public List<Product> viewAllProductAsSeller
+            (@RequestHeader(name = "offset",
+                    required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size){
+        return productService.viewAllProductAsSeller(offset, size);
     }
 
 
@@ -59,10 +62,11 @@ public class ProductController {
 
 
     @PutMapping("/seller/product/update/{productId}")
-    public String updateProductAsSeller(@PathVariable Long productId,
-                                        @RequestBody ProductDto productDto,
-                                        @RequestHeader(name = "Accept-Language",
-                                                required = false) Locale locale){
+    public String updateProductAsSeller
+            (@PathVariable Long productId,
+             @RequestBody ProductDto productDto,
+             @RequestHeader(name = "Accept-Language",
+                     required = false) Locale locale){
         productService.updateProduct(productId,productDto,locale);
         return "product updated successfully";
     }
@@ -77,10 +81,13 @@ public class ProductController {
 
 
     @GetMapping("/customer/product/view/all/{categoryId}")
-    public List<Product> viewAllProductAsCustomer(@PathVariable Long categoryId,
-                                                  @RequestParam Integer page,
-                                                  @RequestParam Integer size){
-        return productService.viewAllProductsAsCustomer(categoryId, page, size);
+    public List<Product> viewAllProductAsCustomer
+            (@PathVariable Long categoryId,
+             @RequestHeader(name = "offset",
+                     required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size){
+        return productService.viewAllProductsAsCustomer(categoryId, offset, size);
     }
 
 
@@ -93,10 +100,13 @@ public class ProductController {
 
 
     @GetMapping("/admin/product/view/all/{categoryId}")
-    public List<Product> viewAllProductAsAdmin(@PathVariable Long categoryId,
-                                               @RequestParam Integer page,
-                                               @RequestParam Integer size){
-        return productService.viewAllProductsAsAdmin(categoryId,page,size);
+    public List<Product> viewAllProductAsAdmin
+            (@PathVariable Long categoryId,
+             @RequestHeader(name = "offset",
+                     required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size){
+        return productService.viewAllProductsAsAdmin(categoryId,offset,size);
     }
 
 
@@ -139,9 +149,11 @@ public class ProductController {
     @GetMapping("/seller/product/variation/views/{productId}")
     public List<ProductVariant> getAllProductVariation
             (@PathVariable Long productId,
-             @RequestParam Integer page,
-             @RequestParam Integer size){
-        return productVariationService.findAllVariation(productId, page, size);
+             @RequestHeader(name = "offset",
+                     required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size){
+        return productVariationService.findAllVariation(productId, offset, size);
     }
 
 
@@ -161,9 +173,11 @@ public class ProductController {
     @GetMapping("/customer/product/view/similar/{productId}")
     public List<Product> similarProductVariation
             (@PathVariable Long productId,
-             @RequestParam Integer page,
-             @RequestParam Integer size){
-        return productService.similarProductVariation(productId, page, size);
+             @RequestHeader(name = "offset",
+                     required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size){
+        return productService.similarProductVariation(productId, offset, size);
     }
 
 }

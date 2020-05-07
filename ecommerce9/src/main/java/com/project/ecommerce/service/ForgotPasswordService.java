@@ -11,10 +11,14 @@ import com.project.ecommerce.repository.UserRepository;
 import com.project.ecommerce.repository.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -85,9 +89,14 @@ public class ForgotPasswordService {
                 String email = verificationToken.getUserEmail();
                 User user = userRepository.findByUsername(email);
                     try {
-                        emailService.sendEmail("ACCOUNT SECURITY ISSUE", "Hii, \nYour password has been changed.", user.getEmail());
-                        String encodedPassword = passwordEncoder.encode(password);
-                        userRepository.updatePassword(encodedPassword, user.getEmail());
+                        emailService.sendEmail("ACCOUNT SECURITY ISSUE",
+                                "Hii, \nYour password has been changed.", user.getEmail());
+//                        String encodedPassword = passwordEncoder.encode(password);
+//                        userRepository.updatePassword(encodedPassword, user.getEmail());
+                        user.setPassword(passwordEncoder.encode(password));
+                        user.setPasswordNotExpired(true);
+                        user.setUpdatePasswordDate(LocalDate.now());
+                        userRepository.save(user);
                         verificationTokenRepository.deleteById(verificationToken.getTokenId());
                     }
                     catch (Exception ex){
@@ -98,4 +107,39 @@ public class ForgotPasswordService {
                     ("reset.password.message", null, locale));
         }
     }
+
+
+
+
+    //---------------------------------------------
+
+
+    @Scheduled(cron = "0 0 12 * * ?")
+    public void passwordExpired() {
+
+        List<User> userList = (List<User>) userRepository.findAll();
+
+        for (User user : userList) {
+            LocalDate currentDate = LocalDate.now();
+
+            if (user.getUpdatePasswordDate() != null) {
+
+                if (user.getUpdatePasswordDate().plusMonths(1).equals(currentDate)) {
+//                if(user.getUpdatePasswordDate().equals(currentDate)){
+
+                    emailService.sendEmail("ALERT! YOUR PASSWORD IS EXPIRED",
+                            "Hi, \n As per terms your password has been expired. " +
+                                    "Click here to reset! http://localhost:8080/password/forgot", user.getEmail());
+
+                    user.setUpdatePasswordDate(LocalDate.now());
+                    user.setPasswordNotExpired(false);
+                    userRepository.save(user);
+                    System.out.println("Password Expired");
+                }
+            }
+        }
+    }
+
+
+
 }

@@ -34,9 +34,12 @@ public class SellerController {
 
 
     @GetMapping("/seller/get/all")
-    public List<Seller> getAllSellers(@RequestParam Integer page,
-                                      @RequestParam Integer size) {
-        return sellerService.listAllSeller(page, size);
+    public List<Seller> getAllSellers
+            (@RequestHeader(name = "offset",
+                    required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size) {
+        return sellerService.listAllSeller(offset, size);
     }
 
 

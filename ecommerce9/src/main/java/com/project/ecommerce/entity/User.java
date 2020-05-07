@@ -2,10 +2,12 @@ package com.project.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.ecommerce.auditing.Auditable;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,6 +59,31 @@ public class User extends Auditable<String> {
     private boolean is_deleted = false;
 
     private boolean is_active = false;
+
+    //------------------------------------------For password expiry task------------------------------------------------
+
+    private boolean passwordNotExpired = true;
+
+    public boolean isPasswordNotExpired() {
+        return passwordNotExpired;
+    }
+
+    public void setPasswordNotExpired(boolean passwordNotExpired) {
+        this.passwordNotExpired = passwordNotExpired;
+    }
+
+    @CreatedDate
+    private LocalDate updatePasswordDate;
+
+    public LocalDate getUpdatePasswordDate() {
+        return updatePasswordDate;
+    }
+
+    public void setUpdatePasswordDate(LocalDate updatePasswordDate) {
+        this.updatePasswordDate = updatePasswordDate;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
 
 
     @ManyToMany(fetch = FetchType.EAGER)

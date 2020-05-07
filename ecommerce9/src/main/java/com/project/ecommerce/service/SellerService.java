@@ -111,6 +111,13 @@ public class SellerService {
     //List All Sellers
 
     public List<Seller> listAllSeller(Integer offset, Integer size){
+
+        if (offset==null)
+            offset=0;
+
+        if (size==null)
+            size=10;
+
         return sellerRepository.findAllSeller
                 (PageRequest.of
                         (offset, size, Sort.Direction.ASC,"user_id"));

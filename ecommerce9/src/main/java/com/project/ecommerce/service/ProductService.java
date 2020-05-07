@@ -80,6 +80,13 @@ public class ProductService {
     // View All Products As Seller
 
     public List<Product> viewAllProductAsSeller(Integer offset,Integer size) {
+
+        if (offset==null)
+            offset=0;
+
+        if (size==null)
+            size=10;
+
         Seller seller = sellerService.getLoggedInSeller();
         return productRepository.findAllBySeller
                 (seller.getUserid(),
@@ -155,6 +162,13 @@ public class ProductService {
     //View All Products as Customer
 
     public List<Product> viewAllProductsAsCustomer(Long categoryId,Integer offset,Integer size) {
+
+        if (offset==null)
+            offset=0;
+
+        if (size==null)
+            size=10;
+
         List<Product> products=productRepository
                 .findAllByCategoryIdForCustomerAdmin
                         (categoryId, PageRequest.of
@@ -184,6 +198,13 @@ public class ProductService {
     //View All Products as Admin
 
     public List<Product> viewAllProductsAsAdmin(Long categoryId, Integer offset, Integer size) {
+
+        if (offset==null)
+            offset=0;
+
+        if (size==null)
+            size=10;
+
         List<Product> products=productRepository
                 .findAllByCategoryIdForCustomerAdmin
                         (categoryId, PageRequest.of
@@ -256,6 +277,13 @@ public class ProductService {
     //Similar Product Variation
 
     public List<Product> similarProductVariation(Long productId,Integer offset,Integer size) {
+
+        if (offset==null)
+            offset=0;
+
+        if (size==null)
+            size=10;
+
         Optional<Product> product = productRepository.findById(productId);
 
         if(!product.isPresent())

@@ -13,7 +13,8 @@ public class UserDao {
     public AppUser loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
         if (user.getEmail() != null) {
-            return new AppUser(user.getEmail(), user.getPassword(), user.getRoles(),user.isIs_active());
+            return new AppUser(user.getEmail(), user.getPassword(), user.getRoles(),
+                    user.isIs_active(), user.isPasswordNotExpired());
         } else {
             throw new UserNotFoundException("User not Found...");
         }

@@ -10,15 +10,21 @@ import java.util.Set;
 public class AppUser implements UserDetails {
 
     private String username;
+
     private String password;
+
     private boolean is_active;
+
+    private boolean passwordNotExpired;
+
     Set<Role> roles;
 
-    public AppUser(String username, String password, Set<Role> grantAuthorities,boolean is_active) {
+    public AppUser(String username, String password, Set<Role> grantAuthorities,boolean is_active, boolean passwordNotExpired) {
         this.username = username;
         this.password = password;
         this.roles = grantAuthorities;
         this.is_active=is_active;
+        this.passwordNotExpired=passwordNotExpired;
     }
 
     @Override
@@ -48,7 +54,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return passwordNotExpired;
     }
 
     @Override

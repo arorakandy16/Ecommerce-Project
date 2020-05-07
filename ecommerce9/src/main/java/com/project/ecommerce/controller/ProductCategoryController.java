@@ -21,8 +21,11 @@ public class ProductCategoryController {
 
     @GetMapping("/category/view/all")
     public List<ProductCategory> viewAll
-            (@RequestParam Integer page, @RequestParam Integer size) {
-        return categoryService.getAll(page, size);
+            (@RequestHeader(name = "offset",
+                    required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size) {
+        return categoryService.getAll(offset, size);
     }
 
 

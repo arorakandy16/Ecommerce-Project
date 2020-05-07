@@ -26,11 +26,14 @@ public class UserController {
     private MessageSource messageSource;
 
 
+
     @GetMapping("/user/get/all")
     public List<UserDto> getAllUsers
-            (@RequestParam Integer page,
-             @RequestParam Integer size){
-        return userService.getAllUsers(page, size);
+            (@RequestHeader(name = "offset",
+                    required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size){
+        return userService.getAllUsers(offset, size);
     }
 
 

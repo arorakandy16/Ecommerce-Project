@@ -30,8 +30,11 @@ public class MetadataFieldController {
 
     @GetMapping("/admin/field/view/all")
     public List<MetadataFieldDto> viewFields
-            (@RequestParam Integer page, @RequestParam Integer size){
-        return metadataFieldService.viewAllFields(page,size);
+            (@RequestHeader(name = "offset",
+                    required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size){
+        return metadataFieldService.viewAllFields(offset,size);
     }
 
 

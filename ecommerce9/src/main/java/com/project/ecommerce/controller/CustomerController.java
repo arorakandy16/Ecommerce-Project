@@ -36,9 +36,11 @@ public class CustomerController {
 
     @GetMapping("/customer/get/all")
     public List<Customer> getAllCustomers
-            (@RequestParam Integer page,
-             @RequestParam Integer size) {
-        return customerService.listAllCustomers(page,size);
+            (@RequestHeader(name = "offset",
+                    required = false) Integer offset,
+             @RequestHeader(name = "size",
+                     required = false) Integer size) {
+        return customerService.listAllCustomers(offset,size);
     }
 
 

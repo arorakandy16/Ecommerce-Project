@@ -22,7 +22,9 @@ public class ForgotPasswordController {
 
 
     @PostMapping("/password/forgot")
-    public String forgotPassword(@RequestBody UserDto user,@RequestHeader(name = "Accept-Language", required = false) Locale locale){
+    public String forgotPassword(@RequestBody UserDto user,
+                                 @RequestHeader(name = "Accept-Language",
+                                         required = false) Locale locale){
         return forgotPasswordService.forgotPassword(user.getEmail(),locale);
     }
 
@@ -30,8 +32,10 @@ public class ForgotPasswordController {
 
     @PutMapping("/password/reset/{token}")
     public String resetPassword
-            (@Valid @RequestBody PasswordDto passwordDto,@PathVariable String token,
-             @RequestHeader(name = "Accept-Language", required = false) Locale locale){
+            (@Valid @RequestBody PasswordDto passwordDto,
+             @PathVariable String token,
+             @RequestHeader(name = "Accept-Language",
+                     required = false) Locale locale){
         return forgotPasswordService.resetPassword(passwordDto,token,locale);
     }
 }
