@@ -24,8 +24,21 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
 
         if (appEvent instanceof AuthenticationSuccessEvent) {
 
-            AuthenticationSuccessEvent event = (AuthenticationSuccessEvent) appEvent;
-            // add code here to handle successful login event
+//            AuthenticationSuccessEvent event = (AuthenticationSuccessEvent) appEvent;
+
+            try {
+                AppUser username = (AppUser) appEvent.getAuthentication().getPrincipal();
+
+                User user = userRepository.findByUsername(username.getUsername());
+
+                user.setFailedAttempts(0);
+
+                userRepository.save(user);
+            }
+
+            catch (Exception ignored){
+            }
+
         }
 
         if (appEvent instanceof AuthenticationFailureBadCredentialsEvent) {
@@ -33,23 +46,33 @@ public class AuthenticationListener implements ApplicationListener<AbstractAuthe
             AuthenticationFailureBadCredentialsEvent event =
                     (AuthenticationFailureBadCredentialsEvent) appEvent;
 
-            // add code here to handle unsuccessful login event
-            // for example, counting the number of login failure attempts and storing it in db
-            // this count can be used to lock or disable any user account as per business requirements
+            // to handle unsuccessful login event
+
             String username = (String) event.getAuthentication().getPrincipal();
+
             User user=userRepository.findByUsername(username);
+
             if(user.getFailedAttempts()==2)
             {
                 user.setIs_active(false);
-                emailService.sendEmail("ACCOUNT SECURITY ISSUE", "Hii, \n As we analyse, There are a lot of " +
-                        "Invalid Login Requests send through your account. As a result, your account has been temporarily Locked." +
-                        "You can access it again within 24 Hours  ", username);
 
+                emailService.sendEmail
+                        ("ACCOUNT SECURITY ISSUE",
+                        "Hii, \n As we analyse, " +
+                                "There are a lot of Invalid Login Requests " +
+                                "send through your account. " +
+                                "As a result, your account has been temporarily Locked." +
+                        "You can access it again within 24 Hours  ",
+                                username);
             }
             else {
+
                 user.setFailedAttempts(user.getFailedAttempts()+1);
+
             }
+
             userRepository.save(user);
+
         }
     }
 }
