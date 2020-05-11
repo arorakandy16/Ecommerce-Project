@@ -129,7 +129,8 @@ public class ForgotPasswordService {
 
                     emailService.sendEmail("ALERT! YOUR PASSWORD IS EXPIRED",
                             "Hi, \n As per terms your password has been expired. " +
-                                    "Click here to reset! http://localhost:8080/password/forgot", user.getEmail());
+                                    "Click here to reset! http://localhost:8080/password/forgot",
+                            user.getEmail());
 
                     user.setUpdatePasswordDate(LocalDate.now());
                     user.setPasswordNotExpired(false);

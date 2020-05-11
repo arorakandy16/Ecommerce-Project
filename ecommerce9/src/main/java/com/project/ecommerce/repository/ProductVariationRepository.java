@@ -1,5 +1,6 @@
 package com.project.ecommerce.repository;
 
+import com.project.ecommerce.entity.Product;
 import com.project.ecommerce.entity.ProductVariant;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,19 @@ public interface ProductVariationRepository extends CrudRepository<ProductVarian
             "where product_id =:productId",nativeQuery = true)
     List<ProductVariant> findByProductId
             (@Param("productId") Long productId, Pageable pageable);
+
+    @Query(value = "select * from product_variant where quantity_available<5", nativeQuery = true)
+    List<ProductVariant> findByProductQuantity();
+
+
+//    @Query(value = "select " +
+//            "p.brand,p.product_name,p.seller_user_id," +
+//            "pv.price,pv.meta_data,pv.quantity_available " +
+//            "from product as p INNER JOIN product_variant as pv on " +
+//            "p.product_id=pv.product_variation_id " +
+//            "where pv.quantity_available<5",
+//            nativeQuery = true)
+//    List<ProductVariant> findByProductQuantity();
 
 
     @Query(value = "select * from product_variant where product_id =:productId",nativeQuery = true)

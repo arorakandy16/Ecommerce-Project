@@ -8,6 +8,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Component
 public class Bootstrap implements ApplicationRunner {
 
@@ -27,6 +30,8 @@ public class Bootstrap implements ApplicationRunner {
     ProductCategoryRepository productCategoryRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    ProductVariationRepository productVariationRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -273,5 +278,29 @@ public class Bootstrap implements ApplicationRunner {
         soleMaterialVal.setProductCategory(shoes);
         metadataFieldValuesRepository.save(soleMaterialVal);
 
+
+
+        //Product
+
+        ProductVariant productVariant1 = new ProductVariant();
+        productVariant1.setQuantityAvailable(4L);
+        productVariant1.setProduct(product1);
+        productVariant1.setPrice(100000);
+        Map<String,String> metadata1 = new HashMap<>();
+        metadata1.put("Processor", "iOS");
+        productVariant1.setMetaData(metadata1);
+
+        productVariationRepository.save(productVariant1);
+
+
+        ProductVariant productVariant2 = new ProductVariant();
+        productVariant2.setQuantityAvailable(10L);
+        productVariant2.setProduct(product2);
+        productVariant2.setPrice(50000);
+        Map<String,String> metadata2 = new HashMap<>();
+        metadata2.put("Processor", "Qualcomm® Snapdragon™ processor");
+        productVariant2.setMetaData(metadata2);
+
+        productVariationRepository.save(productVariant2);
     }
 }

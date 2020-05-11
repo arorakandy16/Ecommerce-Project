@@ -1,21 +1,22 @@
 package com.project.ecommerce.service;
 
 import com.project.ecommerce.dto.ProductDto;
-import com.project.ecommerce.entity.Product;
-import com.project.ecommerce.entity.ProductCategory;
-import com.project.ecommerce.entity.Seller;
+import com.project.ecommerce.entity.*;
 import com.project.ecommerce.exception.InvalidCategoryOrFieldIdException;
 import com.project.ecommerce.exception.Message;
 import com.project.ecommerce.exception.ProductNotFoundException;
 import com.project.ecommerce.exception.ValidationException;
 import com.project.ecommerce.repository.ProductCategoryRepository;
 import com.project.ecommerce.repository.ProductRepository;
+import com.project.ecommerce.repository.ProductVariationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -37,6 +38,9 @@ public class ProductService {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    ProductVariationRepository productVariationRepository;
 
 
     //Add a product
@@ -305,4 +309,28 @@ public class ProductService {
                                 (offset,size, Sort.Direction.ASC, "product_id"));
         return products;
     }
+
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void productQuantityAvailable() {
+
+        List<ProductVariant> productList = productVariationRepository.findByProductQuantity();
+
+        for (ProductVariant productVariant : productList) {
+
+            System.out.println(productVariant.getProduct().getSeller().getEmail());
+                    emailService.sendEmail("PRODUCT QUANTITY LESS THAN 5",
+                            "Hi, \n  Your product " +
+                                    ""+ productVariant.getProduct().getProductName()+" " +
+                                    "quantity is less than 5."
+                            , productVariant.getProduct().getSeller().getEmail());
+
+                }
+
+                    System.out.println("Quantity Less than 5");
+
+            }
+
+
+
 }
