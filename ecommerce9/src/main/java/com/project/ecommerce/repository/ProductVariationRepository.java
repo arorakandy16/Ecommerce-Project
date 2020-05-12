@@ -17,8 +17,19 @@ public interface ProductVariationRepository extends CrudRepository<ProductVarian
     List<ProductVariant> findByProductId
             (@Param("productId") Long productId, Pageable pageable);
 
-    @Query(value = "select * from product_variant where quantity_available<5", nativeQuery = true)
-    List<ProductVariant> findByProductQuantity();
+    @Query(value = "select p.product_name, " +
+            "u.email from product as p, " +
+            "product_variant as pv, " +
+            "user as u where p.product_id=pv.product_id " +
+            "and " +
+            "p.seller_user_id=u.userid " +
+            "and" +
+            " pv.quantity_available<5",
+            nativeQuery = true)
+    List<Object[]> findByProductQuantity();
+
+//    @Query(value = "select * from product_variant where quantity_available<5", nativeQuery = true)
+//    List<ProductVariant> findByProductQuantity();
 
 
 //    @Query(value = "select " +

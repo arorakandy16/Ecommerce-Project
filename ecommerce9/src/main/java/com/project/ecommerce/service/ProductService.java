@@ -311,25 +311,22 @@ public class ProductService {
     }
 
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 6 12 * * ?")
     public void productQuantityAvailable() {
 
-        List<ProductVariant> productList = productVariationRepository.findByProductQuantity();
+        List<Object[]> productList = productVariationRepository.findByProductQuantity();
 
-        for (ProductVariant productVariant : productList) {
+        for (Object[] productVariant : productList) {
 
-            System.out.println(productVariant.getProduct().getSeller().getEmail());
-                    emailService.sendEmail("PRODUCT QUANTITY LESS THAN 5",
-                            "Hi, \n  Your product " +
-                                    ""+ productVariant.getProduct().getProductName()+" " +
-                                    "quantity is less than 5."
-                            , productVariant.getProduct().getSeller().getEmail());
+            emailService.sendEmail("PRODUCT QUANTITY LESS THAN 5",
+                    "Hi, \n  Your product "+ productVariant[0] +" quantity is less than 5."
+                    , productVariant[1].toString());
+        }
 
-                }
+        System.out.println("Product quantity Less than 5");
 
-                    System.out.println("Quantity Less than 5");
+    }
 
-            }
 
 
 
