@@ -294,7 +294,7 @@ public class Bootstrap implements ApplicationRunner {
 
 
         ProductVariant productVariant2 = new ProductVariant();
-        productVariant2.setQuantityAvailable(10L);
+        productVariant2.setQuantityAvailable(3L);
         productVariant2.setProduct(product2);
         productVariant2.setPrice(50000);
         Map<String,String> metadata2 = new HashMap<>();

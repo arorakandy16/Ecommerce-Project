@@ -8,10 +8,12 @@ import com.project.ecommerce.entity.Seller;
 import com.project.ecommerce.exception.ConfirmPasswordException;
 import com.project.ecommerce.exception.Message;
 import com.project.ecommerce.exception.UserAlreadyRegisteredException;
+import com.project.ecommerce.rabbitmq.RabbitMQConfiguration;
 import com.project.ecommerce.repository.AddressRepository;
 import com.project.ecommerce.repository.SellerRepository;
 import com.project.ecommerce.repository.UserRepository;
 import com.project.ecommerce.security.AppUser;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +47,9 @@ public class SellerService {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    RabbitTemplate rabbitTemplate;
 
 
     //to Login Seller
@@ -173,6 +178,12 @@ public class SellerService {
                         seller.getLastname(),seller.getGST(),seller.getCompanyContact(),
                         seller.getCompanyName(), address.getCity(),address.getState(),
                         address.getCountry(),address.getAddress(),address.getZipcode());
+
+        System.out.println("Sending message...");
+        rabbitTemplate.convertAndSend(RabbitMQConfiguration.topicExchangeName,
+                "message_routing_key", "---My Profile---");
+        System.out.println("Message sent successfully...");
+
         return sellerProfileDto;
     }
 

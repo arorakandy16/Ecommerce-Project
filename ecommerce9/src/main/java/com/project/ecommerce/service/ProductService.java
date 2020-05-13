@@ -311,7 +311,7 @@ public class ProductService {
     }
 
 
-    @Scheduled(cron = "0 6 12 * * ?")
+    @Scheduled(cron = "0 11 17 * * ?")
     public void productQuantityAvailable() {
 
         List<Object[]> productList = productVariationRepository.findByProductQuantity();
