@@ -142,12 +142,6 @@ public class ProductVariationService {
 
     public List<ProductVariant> findAllVariation(Long productId,Integer offset, Integer size) {
 
-        if (offset==null)
-            offset=0;
-
-        if (size==null)
-            size=10;
-
         Optional<Product> product=productRepository.findById(productId);
 
         if(product.get().isIs_deleted())

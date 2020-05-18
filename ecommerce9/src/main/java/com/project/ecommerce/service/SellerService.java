@@ -48,9 +48,6 @@ public class SellerService {
     @Autowired
     private MessageSource messageSource;
 
-    @Autowired
-    RabbitTemplate rabbitTemplate;
-
 
     //to Login Seller
 
@@ -117,12 +114,6 @@ public class SellerService {
 
     public List<Seller> listAllSeller(Integer offset, Integer size){
 
-        if (offset==null)
-            offset=0;
-
-        if (size==null)
-            size=10;
-
         return sellerRepository.findAllSeller
                 (PageRequest.of
                         (offset, size, Sort.Direction.ASC,"user_id"));
@@ -178,11 +169,6 @@ public class SellerService {
                         seller.getLastname(),seller.getGST(),seller.getCompanyContact(),
                         seller.getCompanyName(), address.getCity(),address.getState(),
                         address.getCountry(),address.getAddress(),address.getZipcode());
-
-        System.out.println("Sending message...");
-        rabbitTemplate.convertAndSend(RabbitMQConfiguration.topicExchangeName,
-                "message_routing_key", "---My Profile---");
-        System.out.println("Message sent successfully...");
 
         return sellerProfileDto;
     }

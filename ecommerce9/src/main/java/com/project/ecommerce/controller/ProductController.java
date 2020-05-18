@@ -46,9 +46,11 @@ public class ProductController {
     @GetMapping("/seller/product/view/all")
     public List<Product> viewAllProductAsSeller
             (@RequestHeader(name = "offset",
-                    required = false) Integer offset,
+                    required = false,
+                    defaultValue = "0") Integer offset,
              @RequestHeader(name = "size",
-                     required = false) Integer size){
+                     required = false,
+                     defaultValue = "10") Integer size){
         return productService.viewAllProductAsSeller(offset, size);
     }
 
@@ -84,9 +86,11 @@ public class ProductController {
     public List<Product> viewAllProductAsCustomer
             (@PathVariable Long categoryId,
              @RequestHeader(name = "offset",
-                     required = false) Integer offset,
+                     required = false,
+                     defaultValue = "0") Integer offset,
              @RequestHeader(name = "size",
-                     required = false) Integer size){
+                     required = false,
+                     defaultValue = "10") Integer size){
         return productService.viewAllProductsAsCustomer(categoryId, offset, size);
     }
 
@@ -103,9 +107,11 @@ public class ProductController {
     public List<Product> viewAllProductAsAdmin
             (@PathVariable Long categoryId,
              @RequestHeader(name = "offset",
-                     required = false) Integer offset,
+                     required = false,
+                     defaultValue = "0") Integer offset,
              @RequestHeader(name = "size",
-                     required = false) Integer size){
+                     required = false,
+                     defaultValue = "10") Integer size){
         return productService.viewAllProductsAsAdmin(categoryId,offset,size);
     }
 
@@ -150,9 +156,11 @@ public class ProductController {
     public List<ProductVariant> getAllProductVariation
             (@PathVariable Long productId,
              @RequestHeader(name = "offset",
-                     required = false) Integer offset,
+                     required = false,
+                     defaultValue = "0") Integer offset,
              @RequestHeader(name = "size",
-                     required = false) Integer size){
+                     required = false,
+                     defaultValue = "10") Integer size){
         return productVariationService.findAllVariation(productId, offset, size);
     }
 
@@ -174,9 +182,11 @@ public class ProductController {
     public List<Product> similarProductVariation
             (@PathVariable Long productId,
              @RequestHeader(name = "offset",
-                     required = false) Integer offset,
+                     required = false,
+                     defaultValue = "0") Integer offset,
              @RequestHeader(name = "size",
-                     required = false) Integer size){
+                     required = false,
+                     defaultValue = "10") Integer size){
         return productService.similarProductVariation(productId, offset, size);
     }
 

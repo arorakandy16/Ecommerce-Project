@@ -1,6 +1,11 @@
 package com.project.ecommerce;
 
 import com.project.ecommerce.auditing.AuditorAwareImpl;
+import com.project.ecommerce.entity.Product;
+import com.project.ecommerce.rabbitmq.RabbitMQConfiguration;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -28,12 +33,40 @@ import java.util.Locale;
 // @EnableScheduling annotation is used to enable the scheduler for your application.
 @EnableScheduling
 
+
+//public class EcommerceApplication implements CommandLineRunner{
 public class EcommerceApplication {
 
-	public static void main(String[] args) {
+
+
+//	public static void main(String[] args) throws InterruptedException{
+public static void main(String[] args) {
 
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
+
+
+
+//	@Autowired
+//	private RabbitTemplate rabbitTemplate;
+//
+//	@Override
+//	public void run(String... args) throws Exception
+//	{
+//		Product product = new Product();
+//
+//		product.setBrand("louis vuitton");
+//		product.setProductName("Football Bag");
+//		product.setDescription("Football designed Bag");
+//
+//		System.out.println("Sending message...");
+//
+//		rabbitTemplate.convertAndSend(RabbitMQConfiguration.topicExchangeName,
+//				"message_routing_key","Hello");
+//
+//		System.out.println("Message sent successfully...");
+//	}
+
 
 
 	// Used for Auditing
@@ -42,7 +75,6 @@ public class EcommerceApplication {
 	public AuditorAware<String> auditorAware() {
 		return new AuditorAwareImpl();
 	}
-
 
 
 
@@ -60,6 +92,7 @@ public class EcommerceApplication {
 		messageSource.setBasename("messages");
 		return messageSource;
 	}
+
 }
 
 

@@ -37,12 +37,6 @@ public class MetadataFieldService {
 
     public List<MetadataFieldDto> viewAllFields(Integer offset,Integer size) {
 
-        if (offset==null)
-            offset=0;
-
-        if (size==null)
-            size=10;
-
         List<CategoryMetadataField> categoryMetadataField
                 = metadataFieldRepository.viewAllFields
                 (PageRequest.of(offset,size, Sort.Direction.ASC,"id"));

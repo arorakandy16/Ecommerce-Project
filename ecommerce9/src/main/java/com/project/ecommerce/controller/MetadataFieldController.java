@@ -31,9 +31,11 @@ public class MetadataFieldController {
     @GetMapping("/admin/field/view/all")
     public List<MetadataFieldDto> viewFields
             (@RequestHeader(name = "offset",
-                    required = false) Integer offset,
+                    required = false,
+                    defaultValue = "0") Integer offset,
              @RequestHeader(name = "size",
-                     required = false) Integer size){
+                     required = false,
+                     defaultValue = "10") Integer size){
         return metadataFieldService.viewAllFields(offset,size);
     }
 

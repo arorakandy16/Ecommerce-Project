@@ -43,12 +43,6 @@ public class ProductCategoryService {
 
     public List<ProductCategory> getAll(Integer offset, Integer size) {
 
-        if (offset==null)
-            offset=0;
-
-        if (size==null)
-            size=10;
-
         return productCategoryRepository.getAll
                 (PageRequest.of
                         ( offset,size, Sort.Direction.ASC, "pc_id"));

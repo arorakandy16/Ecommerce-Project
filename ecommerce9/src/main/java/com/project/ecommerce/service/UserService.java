@@ -44,12 +44,6 @@ public class UserService {
 
     public List<UserDto> getAllUsers(Integer offset, Integer size) {
 
-        if (offset == null)
-            offset = 0;
-
-        if (size == null)
-            size = 10;
-
         List<User> list = userRepository.getAllUsers
                 (PageRequest.of
                         (offset, size, Sort.Direction.ASC, "userid"));

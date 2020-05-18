@@ -5,10 +5,12 @@ import com.project.ecommerce.auditing.Auditable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Product extends Auditable<String> {
+//public class Product extends Auditable<String> {
+public class Product extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;

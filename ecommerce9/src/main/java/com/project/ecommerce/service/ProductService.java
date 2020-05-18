@@ -6,9 +6,11 @@ import com.project.ecommerce.exception.InvalidCategoryOrFieldIdException;
 import com.project.ecommerce.exception.Message;
 import com.project.ecommerce.exception.ProductNotFoundException;
 import com.project.ecommerce.exception.ValidationException;
+import com.project.ecommerce.rabbitmq.RabbitMQConfiguration;
 import com.project.ecommerce.repository.ProductCategoryRepository;
 import com.project.ecommerce.repository.ProductRepository;
 import com.project.ecommerce.repository.ProductVariationRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -42,23 +43,41 @@ public class ProductService {
     @Autowired
     ProductVariationRepository productVariationRepository;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
 
     //Add a product
 
-    public String addProduct(Product product, Locale locale) {
+    public String addProduct(Product product, Locale locale){
 
         Seller seller = sellerService.getLoggedInSeller();
         product.setSeller(seller);
+
         if (product.getBrand() != null && product.getProductName() != null && product.getProductcategory() != null) {
+
             try {
-                emailService.sendEmail("REGARDING PRODUCT ACTIVATION", "Hii Admin, \n There is a pending task for you. Seller " + seller.getFirstname() +
-                        " added a product '" + product.getProductName() + "', Could you please verify it and activate it ASAP.  ", seller.getEmail());
+                System.out.println("Sending message...");
+
+                emailService.sendEmail("REGARDING PRODUCT ACTIVATION",
+                        "Hii Admin, \n There is a pending task for you. " + seller.getFirstname() +
+                        " added a product '" + product.getProductName() + "', Could you please verify it and activate it ASAP.  ",
+                        "kandyarora4047@gmail.com");
+
                 productRepository.save(product);
-            } catch (Exception ex) {
+
+                rabbitTemplate.convertAndSend(RabbitMQConfiguration.topicExchangeName,
+                        "message_routing_key","Mail Sent to Admin");
+
+                System.out.println("Message sent successfully...");
+            }
+
+            catch (Exception ex) {
                 throw new ValidationException("Mail sending Failed... Product is not added yet... please try again...");
             }
             throw new Message(messageSource.getMessage("product.added.message", null, locale));
         }
+
         else
             throw new InvalidCategoryOrFieldIdException("Fields should not be null");
     }
@@ -84,12 +103,6 @@ public class ProductService {
     // View All Products As Seller
 
     public List<Product> viewAllProductAsSeller(Integer offset,Integer size) {
-
-        if (offset==null)
-            offset=0;
-
-        if (size==null)
-            size=10;
 
         Seller seller = sellerService.getLoggedInSeller();
         return productRepository.findAllBySeller
@@ -167,12 +180,6 @@ public class ProductService {
 
     public List<Product> viewAllProductsAsCustomer(Long categoryId,Integer offset,Integer size) {
 
-        if (offset==null)
-            offset=0;
-
-        if (size==null)
-            size=10;
-
         List<Product> products=productRepository
                 .findAllByCategoryIdForCustomerAdmin
                         (categoryId, PageRequest.of
@@ -202,12 +209,6 @@ public class ProductService {
     //View All Products as Admin
 
     public List<Product> viewAllProductsAsAdmin(Long categoryId, Integer offset, Integer size) {
-
-        if (offset==null)
-            offset=0;
-
-        if (size==null)
-            size=10;
 
         List<Product> products=productRepository
                 .findAllByCategoryIdForCustomerAdmin
@@ -281,12 +282,6 @@ public class ProductService {
     //Similar Product Variation
 
     public List<Product> similarProductVariation(Long productId,Integer offset,Integer size) {
-
-        if (offset==null)
-            offset=0;
-
-        if (size==null)
-            size=10;
 
         Optional<Product> product = productRepository.findById(productId);
 

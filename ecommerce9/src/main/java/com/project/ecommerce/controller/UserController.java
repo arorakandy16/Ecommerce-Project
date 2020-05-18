@@ -30,9 +30,11 @@ public class UserController {
     @GetMapping("/user/get/all")
     public List<UserDto> getAllUsers
             (@RequestHeader(name = "offset",
-                    required = false) Integer offset,
+                    required = false,
+                    defaultValue = "0") Integer offset,
              @RequestHeader(name = "size",
-                     required = false) Integer size){
+                     required = false,
+                     defaultValue = "10") Integer size){
         return userService.getAllUsers(offset, size);
     }
 

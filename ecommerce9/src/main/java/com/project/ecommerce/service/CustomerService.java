@@ -72,12 +72,6 @@ public class CustomerService {
 
     public List<Customer> listAllCustomers(Integer offset,Integer size){
 
-        if (offset==null)
-            offset=0;
-
-        if (size==null)
-            size=10;
-
         return customerRepository.findAllCustomer
                 (PageRequest.of
                         (offset,size, Sort.Direction.ASC,"user_id"));

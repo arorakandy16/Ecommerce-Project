@@ -22,9 +22,11 @@ public class ProductCategoryController {
     @GetMapping("/category/view/all")
     public List<ProductCategory> viewAll
             (@RequestHeader(name = "offset",
-                    required = false) Integer offset,
+                    required = false,
+                    defaultValue = "0") Integer offset,
              @RequestHeader(name = "size",
-                     required = false) Integer size) {
+                     required = false,
+                     defaultValue = "10") Integer size) {
         return categoryService.getAll(offset, size);
     }
 
