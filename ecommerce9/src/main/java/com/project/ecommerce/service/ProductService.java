@@ -43,9 +43,11 @@ public class ProductService {
     @Autowired
     ProductVariationRepository productVariationRepository;
 
+//    @Autowired
+//    private RabbitTemplate rabbitTemplate;
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
-
 
     //Add a product
 
@@ -59,15 +61,20 @@ public class ProductService {
             try {
                 System.out.println("Sending message...");
 
-                emailService.sendEmail("REGARDING PRODUCT ACTIVATION",
-                        "Hii Admin, \n There is a pending task for you. " + seller.getFirstname() +
-                        " added a product '" + product.getProductName() + "', Could you please verify it and activate it ASAP.  ",
-                        "kandyarora4047@gmail.com");
+//                emailService.sendEmail("REGARDING PRODUCT ACTIVATION",
+//                        "Hii Admin, \n There is a pending task for you. " + seller.getFirstname() +
+//                        " added a product '" + product.getProductName() + "', Could you please verify it and activate it ASAP.  ",
+//                        "kandyarora4047@gmail.com");
+
+                emailService.sendEmail("NEW PRODUCT ADDED",
+                        "Hii Seller, new product is added.",seller.getEmail());
 
                 productRepository.save(product);
 
-                rabbitTemplate.convertAndSend(RabbitMQConfiguration.topicExchangeName,
-                        "message_routing_key","Mail Sent to Admin");
+                rabbitTemplate.convertAndSend("message_exchange",
+                        "message_routing_key",
+                        "New product added -> " + product.getProductName()
+                                + "\n Brand -> " +product.getBrand());
 
                 System.out.println("Message sent successfully...");
             }

@@ -34,38 +34,40 @@ import java.util.Locale;
 @EnableScheduling
 
 
-//public class EcommerceApplication implements CommandLineRunner{
-public class EcommerceApplication {
+public class EcommerceApplication implements CommandLineRunner{
+//public class EcommerceApplication {
 
 
 
-//	public static void main(String[] args) throws InterruptedException{
-public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException{
+//public static void main(String[] args) {
 
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
 
 
 
-//	@Autowired
-//	private RabbitTemplate rabbitTemplate;
-//
-//	@Override
-//	public void run(String... args) throws Exception
-//	{
-//		Product product = new Product();
-//
-//		product.setBrand("louis vuitton");
-//		product.setProductName("Football Bag");
-//		product.setDescription("Football designed Bag");
-//
-//		System.out.println("Sending message...");
-//
-//		rabbitTemplate.convertAndSend(RabbitMQConfiguration.topicExchangeName,
-//				"message_routing_key","Hello");
-//
-//		System.out.println("Message sent successfully...");
-//	}
+	@Autowired
+	private RabbitTemplate rabbitTemplate;
+
+	@Override
+	public void run(String... args) throws Exception
+	{
+		Product product = new Product();
+
+		product.setBrand("Louis Vuitton");
+		product.setProductName("Discovery Bumbag ");
+		product.setDescription("Made from classic Damier Graphite canvas");
+
+		System.out.println("Sending message...");
+
+		rabbitTemplate.convertAndSend("message_exchange",
+				"message_routing_key",
+				"New product added -> "
+						+ product.getProductName() + "\n Brand -> " +product.getBrand());
+
+		System.out.println("Message sent successfully...");
+	}
 
 
 

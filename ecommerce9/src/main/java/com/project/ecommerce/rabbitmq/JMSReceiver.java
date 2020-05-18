@@ -5,16 +5,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class JMSReceiver
 {
-    public void receiveMessage(String message)
-    {
-        System.out.println("Received <" + message + ">");
+    public void receiveMessage(String message) {
+        System.out.println("Received \n <" + message + "\n >");
     }
 }
-
-
-
-
-
 
 
 //import java.io.ByteArrayInputStream;
