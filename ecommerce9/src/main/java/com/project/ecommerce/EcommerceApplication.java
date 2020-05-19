@@ -64,7 +64,7 @@ public class EcommerceApplication implements CommandLineRunner{
 		rabbitTemplate.convertAndSend("message_exchange",
 				"message_routing_key",
 				"New product added -> "
-						+ product.getProductName() + "\n Brand -> " +product.getBrand());
+						+ product.getProductName() + "||| Brand -> " +product.getBrand());
 
 		System.out.println("Message sent successfully...");
 	}

@@ -74,7 +74,7 @@ public class ProductService {
                 rabbitTemplate.convertAndSend("message_exchange",
                         "message_routing_key",
                         "New product added -> " + product.getProductName()
-                                + "\n Brand -> " +product.getBrand());
+                                + "||| Brand -> " +product.getBrand());
 
                 System.out.println("Message sent successfully...");
             }

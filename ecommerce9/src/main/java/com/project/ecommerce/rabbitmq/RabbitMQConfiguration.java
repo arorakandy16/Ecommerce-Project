@@ -1,7 +1,6 @@
 package com.project.ecommerce.rabbitmq;
 
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 @Component
-//@PropertySource("classpath:application.properties")
 public class RabbitMQConfiguration {
 
     @Value("${queue.name}")
@@ -20,52 +18,10 @@ public class RabbitMQConfiguration {
     private String exchange;
 
     @Value("${routing.key}")
-    private String routingkey;
+    private String routingKey;
 
-
-
-//    @Bean
-//    public Binding bindingDirectExchangeQueueADirect1(DirectExchange directExchange, Queue queueA) {
-//        return BindingBuilder.bind(queueA).to(directExchange).with(direct1RoutingKey);
-//    }
-//
-//
-//    @Bean
-//    public Binding bindingDirectExchangeQueueBDirect2(DirectExchange directExchange, Queue queueB) {
-//        return BindingBuilder.bind(queueB).to(directExchange).with(direct2RoutingKey);
-//    }
-//
-//
-//    @Value("${routing.topic.rabbitmq.#}")
-//    private String topicRabbitMQRoutingKey;
-//
-//
-//    @Bean
-//    public Binding bindingTopicExchangeQueueCTopicRabbitMQ(TopicExchange topicExchange, Queue queueC) {
-//        return BindingBuilder.bind(queueC).to(topicExchange).with(topicRabbitMQRoutingKey);
-//    }
-//
-//
-//    @Value("${routing.topic.rabbitmq.spring.#}")
-//    private String topicRabbitMQSpringRoutingKey;
-//
-//
-//    @Bean
-//    public Binding bindingTopicExchangeQueueDTopicRabbitMQSpring(TopicExchange topicExchange, Queue queueD) {
-//        return BindingBuilder.bind(queueD).to(topicExchange).with(topicRabbitMQSpringRoutingKey);
-//    }
-//
-//
-//    @Bean
-//    public Binding bindingFanoutExchangeQueueEFanout(FanoutExchange fanoutExchange, Queue queueE) {
-//        return BindingBuilder.bind(queueE).to(fanoutExchange);
-//    }
-//
-//
-//    @Bean
-//    public Binding bindingFanoutExchangeQueueFFanout(FanoutExchange fanoutExchange, Queue queueF) {
-//        return BindingBuilder.bind(queueF).to(fanoutExchange);
-//    }
+    @Value("${message.receive}")
+    private String messageReceive;
 
 
     @Bean
@@ -82,18 +38,7 @@ public class RabbitMQConfiguration {
 
     @Bean
     Binding binding(Queue queue, DirectExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(routingkey);
-    }
-
-
-    @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new
-                CachingConnectionFactory("localhost");
-        connectionFactory.setPort(5672);
-        connectionFactory.setUsername("admin");
-        connectionFactory.setPassword("admin");
-        return connectionFactory;
+        return BindingBuilder.bind(queue).to(exchange).with(routingKey);
     }
 
 
@@ -111,8 +56,6 @@ public class RabbitMQConfiguration {
 
     @Bean
     MessageListenerAdapter listenerAdapter(JMSReceiver jmsReceiver) {
-        return new MessageListenerAdapter(jmsReceiver, "receiveMessage");
+        return new MessageListenerAdapter(jmsReceiver,messageReceive);
     }
-
-
 }
