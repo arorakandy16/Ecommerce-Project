@@ -58,4 +58,36 @@ public class RabbitMQConfiguration {
     MessageListenerAdapter listenerAdapter(JMSReceiver jmsReceiver) {
         return new MessageListenerAdapter(jmsReceiver,messageReceive);
     }
+
+    public String getQueueName() {
+        return queueName;
+    }
+
+    public void setQueueName(String queueName) {
+        this.queueName = queueName;
+    }
+
+    public String getExchange() {
+        return exchange;
+    }
+
+    public void setExchange(String exchange) {
+        this.exchange = exchange;
+    }
+
+    public String getRoutingKey() {
+        return routingKey;
+    }
+
+    public void setRoutingKey(String routingKey) {
+        this.routingKey = routingKey;
+    }
+
+    public String getMessageReceive() {
+        return messageReceive;
+    }
+
+    public void setMessageReceive(String messageReceive) {
+        this.messageReceive = messageReceive;
+    }
 }

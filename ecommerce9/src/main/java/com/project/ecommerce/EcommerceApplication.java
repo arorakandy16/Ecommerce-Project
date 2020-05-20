@@ -50,6 +50,9 @@ public class EcommerceApplication implements CommandLineRunner{
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
 
+	@Autowired
+	RabbitMQConfiguration rabbitMQConfiguration;
+
 	@Override
 	public void run(String... args) throws Exception
 	{
@@ -61,8 +64,8 @@ public class EcommerceApplication implements CommandLineRunner{
 
 		System.out.println("Sending message...");
 
-		rabbitTemplate.convertAndSend("message_exchange",
-				"message_routing_key",
+		rabbitTemplate.convertAndSend(rabbitMQConfiguration.getExchange(),
+				rabbitMQConfiguration.getRoutingKey(),
 				"New product added -> "
 						+ product.getProductName() + "||| Brand -> " +product.getBrand());
 

@@ -12,6 +12,7 @@ import com.project.ecommerce.repository.ProductRepository;
 import com.project.ecommerce.repository.ProductVariationRepository;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -43,11 +44,12 @@ public class ProductService {
     @Autowired
     ProductVariationRepository productVariationRepository;
 
-//    @Autowired
-//    private RabbitTemplate rabbitTemplate;
-
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    RabbitMQConfiguration rabbitMQConfiguration;
+
 
     //Add a product
 
@@ -71,8 +73,8 @@ public class ProductService {
 
                 productRepository.save(product);
 
-                rabbitTemplate.convertAndSend("message_exchange",
-                        "message_routing_key",
+                rabbitTemplate.convertAndSend(rabbitMQConfiguration.getExchange(),
+                        rabbitMQConfiguration.getRoutingKey(),
                         "New product added -> " + product.getProductName()
                                 + "||| Brand -> " +product.getBrand());
 
