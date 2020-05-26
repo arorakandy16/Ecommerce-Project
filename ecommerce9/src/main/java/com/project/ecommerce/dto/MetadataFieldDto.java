@@ -1,6 +1,8 @@
 package com.project.ecommerce.dto;
 
-public class MetadataFieldDto {
+import java.io.Serializable;
+
+public class MetadataFieldDto implements Serializable {
 
     private Long Id;
 

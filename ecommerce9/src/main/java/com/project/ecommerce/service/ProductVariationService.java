@@ -9,7 +9,11 @@ import com.project.ecommerce.exception.UserNotFoundException;
 import com.project.ecommerce.exception.ValidationException;
 import com.project.ecommerce.repository.*;
 import com.project.ecommerce.security.AppUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -44,6 +48,8 @@ public class ProductVariationService {
     @Autowired
     private MessageSource messageSource;
 
+    Logger logger = LoggerFactory.getLogger(ProductVariationService.class);
+
 
     //to Login Seller
 
@@ -59,9 +65,13 @@ public class ProductVariationService {
 
     //Add Product Variation
 
+//    @Cacheable(cacheNames = "addProductVariation")
+
     public String addProductVariation(ProductVariationDto productVariationDto, Locale locale) {
         Optional<Product> product = productRepository.findById
                 (productVariationDto.getProductId());
+
+//        logger.info("Caching is working");
 
         if (!product.isPresent() && !product.get().isIs_active())
             throw new ProductNotFoundException("PRODUCT NOT FOUND");
@@ -115,9 +125,13 @@ public class ProductVariationService {
 
     //Find Product Variation
 
+    @Cacheable(cacheNames = "findProductVariation")
+
     public ProductVariant findProductVariation(Long variationId) {
         Optional<ProductVariant> productVariation
                 = productVariationRepository.findById(variationId);
+
+        logger.info("Caching is working");
 
         if(!productVariation.isPresent())
             throw new ProductNotFoundException("Product Variation does not exist");
@@ -140,9 +154,13 @@ public class ProductVariationService {
 
     //Find All Variation
 
+    @Cacheable(cacheNames = "findAllVariation")
+
     public List<ProductVariant> findAllVariation(Long productId,Integer offset, Integer size) {
 
         Optional<Product> product=productRepository.findById(productId);
+
+        logger.info("Caching is working");
 
         if(product.get().isIs_deleted())
             throw new ProductNotFoundException("Product does not exist");
@@ -169,10 +187,14 @@ public class ProductVariationService {
 
     //Update Product Variation
 
+    @CachePut(cacheNames = "updateProductVariation")
+
     public String updateProductVariation(Long id, UpdateVariationDto updateVariationDto,
                                          Locale locale) {
         Optional<ProductVariant> productVariationOptional
                 = productVariationRepository.findById(id);
+
+        logger.info("Caching is working");
 
         if (!productVariationOptional.isPresent())
             throw new EntityNotFoundException("Product variation Id is not valid");

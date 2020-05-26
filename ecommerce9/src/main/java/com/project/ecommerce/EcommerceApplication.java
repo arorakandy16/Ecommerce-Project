@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.domain.AuditorAware;
@@ -33,44 +34,47 @@ import java.util.Locale;
 // @EnableScheduling annotation is used to enable the scheduler for your application.
 @EnableScheduling
 
-
-public class EcommerceApplication implements CommandLineRunner{
-//public class EcommerceApplication {
-
+//
+@EnableCaching
 
 
-	public static void main(String[] args) throws InterruptedException{
-//public static void main(String[] args) {
+//public class EcommerceApplication implements CommandLineRunner{
+public class EcommerceApplication {
+
+
+
+//	public static void main(String[] args) throws InterruptedException{
+public static void main(String[] args) {
 
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
 
 
 
-	@Autowired
-	private RabbitTemplate rabbitTemplate;
-
-	@Autowired
-	RabbitMQConfiguration rabbitMQConfiguration;
-
-	@Override
-	public void run(String... args) throws Exception
-	{
-		Product product = new Product();
-
-		product.setBrand("Louis Vuitton");
-		product.setProductName("Discovery Bumbag ");
-		product.setDescription("Made from classic Damier Graphite canvas");
-
-		System.out.println("Sending message...");
-
-		rabbitTemplate.convertAndSend(rabbitMQConfiguration.getExchange(),
-				rabbitMQConfiguration.getRoutingKey(),
-				"New product added -> "
-						+ product.getProductName() + "||| Brand -> " +product.getBrand());
-
-		System.out.println("Message sent successfully...");
-	}
+//	@Autowired
+//	private RabbitTemplate rabbitTemplate;
+//
+//	@Autowired
+//	RabbitMQConfiguration rabbitMQConfiguration;
+//
+//	@Override
+//	public void run(String... args) throws Exception
+//	{
+//		Product product = new Product();
+//
+//		product.setBrand("Louis Vuitton");
+//		product.setProductName("Discovery Bumbag ");
+//		product.setDescription("Made from classic Damier Graphite canvas");
+//
+//		System.out.println("Sending message...");
+//
+//		rabbitTemplate.convertAndSend(rabbitMQConfiguration.getExchange(),
+//				rabbitMQConfiguration.getRoutingKey(),
+//				"New product added -> "
+//						+ product.getProductName() + "||| Brand -> " +product.getBrand());
+//
+//		System.out.println("Message sent successfully...");
+//	}
 
 
 

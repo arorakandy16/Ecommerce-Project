@@ -9,7 +9,11 @@ import com.project.ecommerce.exception.Message;
 import com.project.ecommerce.repository.MetadataFieldRepository;
 import com.project.ecommerce.repository.MetadataFieldValuesRepository;
 import com.project.ecommerce.repository.ProductCategoryRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -32,8 +36,12 @@ public class MetadataFieldService {
     @Autowired
     private MessageSource messageSource;
 
+    Logger logger = LoggerFactory.getLogger(MetadataFieldService.class);
 
-    //View All Fields
+
+    //Get All Fields
+
+    @Cacheable(cacheNames = "viewAllFields")
 
     public List<MetadataFieldDto> viewAllFields(Integer offset,Integer size) {
 
@@ -42,6 +50,8 @@ public class MetadataFieldService {
                 (PageRequest.of(offset,size, Sort.Direction.ASC,"id"));
 
         List<MetadataFieldDto> metadataFieldDtos=new ArrayList<>();
+
+        logger.info("Caching is working");
 
         for(CategoryMetadataField fields:categoryMetadataField){
             MetadataFieldDto metadataFieldDto=new MetadataFieldDto();
@@ -56,7 +66,12 @@ public class MetadataFieldService {
 
     //Add Field
 
+//    @Cacheable(cacheNames = "addField")
+
     public String addField(CategoryMetadataField categoryMetadataField, Locale locale) {
+
+//        logger.info("Caching is working");
+
         try {
             metadataFieldRepository.save(categoryMetadataField);
         }
@@ -71,10 +86,14 @@ public class MetadataFieldService {
 
     //Add Values
 
+//    @Cacheable(cacheNames = "addValues")
+
     public String addValues(CategoryMetadataFieldValues values,
                             Long categoryId, Long fieldId, Locale locale) {
 
         Optional<ProductCategory> productCategory=productCategoryRepository.findById(categoryId);
+
+//        logger.info("Caching is working");
 
         if(!productCategory.isPresent())
             throw new InvalidCategoryOrFieldIdException("Category id is invalid");
@@ -100,9 +119,13 @@ public class MetadataFieldService {
 
     //Update Values
 
+    @CachePut(cacheNames = "updateValues")
+
     public String updateValues(CategoryMetadataFieldValues values,
                                Long categoryId, Long fieldId, Locale locale) {
         Optional<ProductCategory> productCategory=productCategoryRepository.findById(categoryId);
+
+        logger.info("Caching is working");
 
         if(!productCategory.isPresent())
             throw new InvalidCategoryOrFieldIdException("Category id is invalid");
@@ -128,6 +151,4 @@ public class MetadataFieldService {
         throw new Message(messageSource.getMessage
                 ("admin.update.metadata.values.message", null, locale));
     }
-
-
 }

@@ -10,9 +10,14 @@ import com.project.ecommerce.rabbitmq.RabbitMQConfiguration;
 import com.project.ecommerce.repository.ProductCategoryRepository;
 import com.project.ecommerce.repository.ProductRepository;
 import com.project.ecommerce.repository.ProductVariationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -50,13 +55,19 @@ public class ProductService {
     @Autowired
     RabbitMQConfiguration rabbitMQConfiguration;
 
+    Logger logger = LoggerFactory.getLogger(ProductService.class);
+
 
     //Add a product
+
+//    @Cacheable(cacheNames = "addProduct")
 
     public String addProduct(Product product, Locale locale){
 
         Seller seller = sellerService.getLoggedInSeller();
         product.setSeller(seller);
+
+//        logger.info("Caching is working");
 
         if (product.getBrand() != null && product.getProductName() != null && product.getProductcategory() != null) {
 
@@ -95,9 +106,14 @@ public class ProductService {
 
     //View Product as Seller
 
+    @Cacheable(cacheNames = "viewProductAsSeller")
+
     public Optional<Product> viewProductAsSeller(Long productId) {
         Seller seller = sellerService.getLoggedInSeller();
         Optional<Product> product = productRepository.findByIdAndSellerId(productId, seller.getUserid());
+
+        logger.info("Caching is working");
+
         if (product.get().getProductId() != null)
             if(!product.get().isIs_deleted())
                 return product;
@@ -111,9 +127,14 @@ public class ProductService {
 
     // View All Products As Seller
 
+    @Cacheable(cacheNames = "viewAllProductAsSeller")
+
     public List<Product> viewAllProductAsSeller(Integer offset,Integer size) {
 
         Seller seller = sellerService.getLoggedInSeller();
+
+        logger.info("Caching is working");
+
         return productRepository.findAllBySeller
                 (seller.getUserid(),
                         PageRequest.of
@@ -123,10 +144,15 @@ public class ProductService {
 
     //Delete a product
 
+    @CacheEvict(cacheNames = "deleteProduct")
+
     @Transactional
     public String deleteProduct(Long productId) {
         Seller seller = sellerService.getLoggedInSeller();
         Optional<Product> product=productRepository.findById(productId);
+
+        logger.info("Caching is working");
+
         if(!product.isPresent())
             throw new ProductNotFoundException("Product does not exist");
         if(product.get().getSeller().getUserid()!=seller.getUserid())
@@ -140,11 +166,16 @@ public class ProductService {
 
     //Update Product
 
+    @CachePut(cacheNames = "updateProduct")
+
     @Transactional
     public void updateProduct(Long productId,ProductDto productDto,Locale locale) {
         Seller seller = sellerService.getLoggedInSeller();
         Optional<Product> product = productRepository.findByIdAndSellerId
                 (productId, seller.getUserid());
+
+        logger.info("Caching is working");
+
         if(!product.isPresent())
             throw new ProductNotFoundException("Product does not exist");
 
@@ -175,8 +206,13 @@ public class ProductService {
 
     //View a Product as Customer
 
+    @Cacheable(cacheNames = "viewAProductAsCustomer")
+
     public Optional<Product> viewAProductAsCustomer(Long productId) {
         Optional<Product> product = productRepository.findById(productId);
+
+        logger.info("Caching is working");
+
         if (product.get() != null)
             return product;
         else
@@ -187,12 +223,16 @@ public class ProductService {
 
     //View All Products as Customer
 
+    @Cacheable(cacheNames = "viewAllProductsAsCustomer")
+
     public List<Product> viewAllProductsAsCustomer(Long categoryId,Integer offset,Integer size) {
 
         List<Product> products=productRepository
                 .findAllByCategoryIdForCustomerAdmin
                         (categoryId, PageRequest.of
                                 ( offset, size, Sort.Direction.ASC, "product_id"));
+
+        logger.info("Caching is working");
 
         if (products.isEmpty())
             throw new ProductNotFoundException("Invalid Category Id");
@@ -205,8 +245,13 @@ public class ProductService {
 
     //View a Product as Admin
 
+    @Cacheable(cacheNames = "viewAProductAsAdmin")
+
     public Optional<Product> viewAProductAsAdmin(Long productId) {
         Optional<Product> product = productRepository.findById(productId);
+
+        logger.info("Caching is working");
+
         if (!product.isPresent())
             throw new ProductNotFoundException("Invalid Category Id");
         return product;
@@ -217,6 +262,8 @@ public class ProductService {
 
     //View All Products as Admin
 
+    @Cacheable(cacheNames = "viewAllProductsAsAdmin")
+
     public List<Product> viewAllProductsAsAdmin(Long categoryId, Integer offset, Integer size) {
 
         List<Product> products=productRepository
@@ -224,6 +271,8 @@ public class ProductService {
                         (categoryId, PageRequest.of
                                 (offset, size, Sort.Direction.ASC,
                                         "product_id","seller_user_id"));
+
+        logger.info("Caching is working");
 
         if (products.isEmpty())
             throw new ProductNotFoundException("Invalid Category Id");
@@ -237,6 +286,9 @@ public class ProductService {
 
     public String deactivateProduct(Long productId, Locale locale) {
         Optional<Product> product=productRepository.findById(productId);
+
+        logger.info("Caching is working");
+
         if(product.get().isIs_active()){
             try {
                 emailService.sendEmail("REGARDING PRODUCT ACTIVATION", "Hii, \n We have found a suspicious product that you added," +

@@ -5,11 +5,12 @@ import com.project.ecommerce.auditing.Auditable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class CategoryMetadataField extends Auditable<String> {
+public class CategoryMetadataField extends Auditable<String> implements Serializable {
 
 
     @Id

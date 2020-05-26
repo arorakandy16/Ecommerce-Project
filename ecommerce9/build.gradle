@@ -25,6 +25,9 @@ dependencies {
 	//----------------------------RabbitMQ-----------------------------------------------------------
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp'
 
+	//----------------------------Redis-----------------------------------------------------------
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
+
 	//----------------------------Passay-------------------------------------------------------------
 	//Library for checking that a password complies with a custom set of rules
 	compile group: 'org.passay', name: 'passay', version: '1.5.0'

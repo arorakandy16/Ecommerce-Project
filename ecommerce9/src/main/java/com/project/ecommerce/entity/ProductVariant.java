@@ -4,10 +4,11 @@ import com.project.ecommerce.auditing.Auditable;
 import com.project.ecommerce.metadata.HashMapConverter;
 import javax.persistence.*;
 import java.io.File;
+import java.io.Serializable;
 import java.util.Map;
 
 @Entity
-public class  ProductVariant extends Auditable<String> {
+public class  ProductVariant extends Auditable<String> implements Serializable {
 
 
     @Id

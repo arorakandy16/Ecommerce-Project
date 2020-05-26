@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "user_id")
-public class Seller extends User {
+public class Seller extends User implements Serializable{
 
    @NotNull
     private String GST;
