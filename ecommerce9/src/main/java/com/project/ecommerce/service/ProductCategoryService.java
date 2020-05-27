@@ -47,7 +47,7 @@ public class ProductCategoryService {
 
     //Get All Product Category
 
-    @Cacheable(cacheNames = "getAll")
+    @Cacheable("${category.cache}")
 
     public List<ProductCategory> getAll(Integer offset, Integer size) {
 
@@ -62,11 +62,7 @@ public class ProductCategoryService {
 
     //Add Category
 
-//    @Cacheable(cacheNames = "addCategory")
-
     public String addCategory(ProductCategory productCategory, Locale locale) {
-
-//        logger.info("Caching is working");
 
         try {
             productCategoryRepository.save(productCategory);
@@ -84,7 +80,7 @@ public class ProductCategoryService {
 
     // Get a Category
 
-    @Cacheable(cacheNames = "getACategory")
+    @Cacheable("${category.cache}")
 
     public Optional<ProductCategory> getACategory(Long id) {
 
@@ -105,7 +101,7 @@ public class ProductCategoryService {
 
     //Update Category
 
-    @CachePut(cacheNames = "updateCategory")
+    @CachePut("${category.cache}")
 
     public String updateCategory(Long id, ProductCategory name, Locale locale) {
 
@@ -137,7 +133,7 @@ public class ProductCategoryService {
 
     //Get All Categories By Customer
 
-    @Cacheable(cacheNames = "viewAllCategoriesByCustomer")
+    @Cacheable("${category.cache}")
 
     public List<CategoryDto> viewAllCategoriesByCustomer(Long id) {
 
@@ -191,7 +187,7 @@ public class ProductCategoryService {
 
     //Filter Category By Customer
 
-    @Cacheable(cacheNames = "category6")
+    @Cacheable("${category.cache}")
 
     public FilterCategoryDto filterCategoryByCustomer(Long categoryId) {
 

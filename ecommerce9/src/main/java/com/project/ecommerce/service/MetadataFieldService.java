@@ -41,7 +41,7 @@ public class MetadataFieldService {
 
     //Get All Fields
 
-    @Cacheable(cacheNames = "viewAllFields")
+    @Cacheable("${field.cache}")
 
     public List<MetadataFieldDto> viewAllFields(Integer offset,Integer size) {
 
@@ -66,11 +66,7 @@ public class MetadataFieldService {
 
     //Add Field
 
-//    @Cacheable(cacheNames = "addField")
-
     public String addField(CategoryMetadataField categoryMetadataField, Locale locale) {
-
-//        logger.info("Caching is working");
 
         try {
             metadataFieldRepository.save(categoryMetadataField);
@@ -86,14 +82,10 @@ public class MetadataFieldService {
 
     //Add Values
 
-//    @Cacheable(cacheNames = "addValues")
-
     public String addValues(CategoryMetadataFieldValues values,
                             Long categoryId, Long fieldId, Locale locale) {
 
         Optional<ProductCategory> productCategory=productCategoryRepository.findById(categoryId);
-
-//        logger.info("Caching is working");
 
         if(!productCategory.isPresent())
             throw new InvalidCategoryOrFieldIdException("Category id is invalid");
@@ -119,7 +111,7 @@ public class MetadataFieldService {
 
     //Update Values
 
-    @CachePut(cacheNames = "updateValues")
+    @CachePut("${value.cache}")
 
     public String updateValues(CategoryMetadataFieldValues values,
                                Long categoryId, Long fieldId, Locale locale) {

@@ -60,14 +60,10 @@ public class ProductService {
 
     //Add a product
 
-//    @Cacheable(cacheNames = "addProduct")
-
     public String addProduct(Product product, Locale locale){
 
         Seller seller = sellerService.getLoggedInSeller();
         product.setSeller(seller);
-
-//        logger.info("Caching is working");
 
         if (product.getBrand() != null && product.getProductName() != null && product.getProductcategory() != null) {
 
@@ -106,7 +102,7 @@ public class ProductService {
 
     //View Product as Seller
 
-    @Cacheable(cacheNames = "viewProductAsSeller")
+    @Cacheable("${product.cache}")
 
     public Optional<Product> viewProductAsSeller(Long productId) {
         Seller seller = sellerService.getLoggedInSeller();
@@ -127,7 +123,7 @@ public class ProductService {
 
     // View All Products As Seller
 
-    @Cacheable(cacheNames = "viewAllProductAsSeller")
+    @Cacheable("${product.cache}")
 
     public List<Product> viewAllProductAsSeller(Integer offset,Integer size) {
 
@@ -144,7 +140,7 @@ public class ProductService {
 
     //Delete a product
 
-    @CacheEvict(cacheNames = "deleteProduct")
+    @CacheEvict("${product.cache}")
 
     @Transactional
     public String deleteProduct(Long productId) {
@@ -166,7 +162,7 @@ public class ProductService {
 
     //Update Product
 
-    @CachePut(cacheNames = "updateProduct")
+    @CachePut("${product.cache}")
 
     @Transactional
     public void updateProduct(Long productId,ProductDto productDto,Locale locale) {
@@ -206,7 +202,7 @@ public class ProductService {
 
     //View a Product as Customer
 
-    @Cacheable(cacheNames = "viewAProductAsCustomer")
+    @Cacheable("${product.cache}")
 
     public Optional<Product> viewAProductAsCustomer(Long productId) {
         Optional<Product> product = productRepository.findById(productId);
@@ -223,7 +219,7 @@ public class ProductService {
 
     //View All Products as Customer
 
-    @Cacheable(cacheNames = "viewAllProductsAsCustomer")
+    @Cacheable("${product.cache}")
 
     public List<Product> viewAllProductsAsCustomer(Long categoryId,Integer offset,Integer size) {
 
@@ -245,7 +241,7 @@ public class ProductService {
 
     //View a Product as Admin
 
-    @Cacheable(cacheNames = "viewAProductAsAdmin")
+    @Cacheable("${product.cache}")
 
     public Optional<Product> viewAProductAsAdmin(Long productId) {
         Optional<Product> product = productRepository.findById(productId);
@@ -262,7 +258,7 @@ public class ProductService {
 
     //View All Products as Admin
 
-    @Cacheable(cacheNames = "viewAllProductsAsAdmin")
+    @Cacheable("${product.cache}")
 
     public List<Product> viewAllProductsAsAdmin(Long categoryId, Integer offset, Integer size) {
 

@@ -31,50 +31,18 @@ import java.util.Locale;
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 
 
-// @EnableScheduling annotation is used to enable the scheduler for your application.
+// To enable the scheduler for your application.
 @EnableScheduling
 
-//
+//To enable caching
 @EnableCaching
 
 
-//public class EcommerceApplication implements CommandLineRunner{
 public class EcommerceApplication {
 
-
-
-//	public static void main(String[] args) throws InterruptedException{
-public static void main(String[] args) {
-
+	public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
 	}
-
-
-
-//	@Autowired
-//	private RabbitTemplate rabbitTemplate;
-//
-//	@Autowired
-//	RabbitMQConfiguration rabbitMQConfiguration;
-//
-//	@Override
-//	public void run(String... args) throws Exception
-//	{
-//		Product product = new Product();
-//
-//		product.setBrand("Louis Vuitton");
-//		product.setProductName("Discovery Bumbag ");
-//		product.setDescription("Made from classic Damier Graphite canvas");
-//
-//		System.out.println("Sending message...");
-//
-//		rabbitTemplate.convertAndSend(rabbitMQConfiguration.getExchange(),
-//				rabbitMQConfiguration.getRoutingKey(),
-//				"New product added -> "
-//						+ product.getProductName() + "||| Brand -> " +product.getBrand());
-//
-//		System.out.println("Message sent successfully...");
-//	}
 
 
 
@@ -103,5 +71,3 @@ public static void main(String[] args) {
 	}
 
 }
-
-

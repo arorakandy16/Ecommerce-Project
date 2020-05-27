@@ -51,6 +51,7 @@ public class ProductVariationService {
     Logger logger = LoggerFactory.getLogger(ProductVariationService.class);
 
 
+
     //to Login Seller
 
     public User getLoggedInSeller() {
@@ -65,13 +66,9 @@ public class ProductVariationService {
 
     //Add Product Variation
 
-//    @Cacheable(cacheNames = "addProductVariation")
-
     public String addProductVariation(ProductVariationDto productVariationDto, Locale locale) {
         Optional<Product> product = productRepository.findById
                 (productVariationDto.getProductId());
-
-//        logger.info("Caching is working");
 
         if (!product.isPresent() && !product.get().isIs_active())
             throw new ProductNotFoundException("PRODUCT NOT FOUND");
@@ -125,7 +122,7 @@ public class ProductVariationService {
 
     //Find Product Variation
 
-    @Cacheable(cacheNames = "findProductVariation")
+    @Cacheable("${variation.cache}")
 
     public ProductVariant findProductVariation(Long variationId) {
         Optional<ProductVariant> productVariation
@@ -154,7 +151,7 @@ public class ProductVariationService {
 
     //Find All Variation
 
-    @Cacheable(cacheNames = "findAllVariation")
+    @Cacheable("${variation.cache}")
 
     public List<ProductVariant> findAllVariation(Long productId,Integer offset, Integer size) {
 
@@ -187,7 +184,7 @@ public class ProductVariationService {
 
     //Update Product Variation
 
-    @CachePut(cacheNames = "updateProductVariation")
+    @CachePut("${variation.cache}")
 
     public String updateProductVariation(Long id, UpdateVariationDto updateVariationDto,
                                          Locale locale) {
