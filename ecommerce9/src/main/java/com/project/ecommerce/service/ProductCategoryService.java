@@ -62,7 +62,11 @@ public class ProductCategoryService {
 
     //Add Category
 
+    @Cacheable("${category.cache}")
+
     public String addCategory(ProductCategory productCategory, Locale locale) {
+
+        logger.info("Caching is working");
 
         try {
             productCategoryRepository.save(productCategory);

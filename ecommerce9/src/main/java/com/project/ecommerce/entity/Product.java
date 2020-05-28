@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-//public class Product extends Auditable<String> {
 public class Product extends Auditable<String> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -60,10 +60,14 @@ public class ProductService {
 
     //Add a product
 
+    @Cacheable("${product.cache}")
+
     public String addProduct(Product product, Locale locale){
 
         Seller seller = sellerService.getLoggedInSeller();
         product.setSeller(seller);
+
+        logger.info("Caching is working");
 
         if (product.getBrand() != null && product.getProductName() != null && product.getProductcategory() != null) {
 
@@ -106,15 +110,20 @@ public class ProductService {
 
     public Optional<Product> viewProductAsSeller(Long productId) {
         Seller seller = sellerService.getLoggedInSeller();
+
         Optional<Product> product = productRepository.findByIdAndSellerId(productId, seller.getUserid());
 
         logger.info("Caching is working");
 
         if (product.get().getProductId() != null)
+
             if(!product.get().isIs_deleted())
                 return product;
+
             else
                 throw new ProductNotFoundException("Product has been deleted from the database");
+
+
         else
             throw new ProductNotFoundException("Product does not exist");
     }
@@ -145,15 +154,18 @@ public class ProductService {
     @Transactional
     public String deleteProduct(Long productId) {
         Seller seller = sellerService.getLoggedInSeller();
+
         Optional<Product> product=productRepository.findById(productId);
 
         logger.info("Caching is working");
 
         if(!product.isPresent())
             throw new ProductNotFoundException("Product does not exist");
+
         if(product.get().getSeller().getUserid()!=seller.getUserid())
             throw new ProductNotFoundException("Product does not exist");
-            if(product.get().isIs_deleted())
+
+        if(product.get().isIs_deleted())
                 throw new ValidationException("Product is already deleted");
             productRepository.deleteProduct(productId);
             return "Product deleted successfully";
@@ -167,6 +179,7 @@ public class ProductService {
     @Transactional
     public void updateProduct(Long productId,ProductDto productDto,Locale locale) {
         Seller seller = sellerService.getLoggedInSeller();
+
         Optional<Product> product = productRepository.findByIdAndSellerId
                 (productId, seller.getUserid());
 
@@ -280,6 +293,8 @@ public class ProductService {
 
     //De-activate Product
 
+    @Cacheable("${product.cache}")
+
     public String deactivateProduct(Long productId, Locale locale) {
         Optional<Product> product=productRepository.findById(productId);
 
@@ -308,8 +323,12 @@ public class ProductService {
 
     //Activate a Product
 
+    @Cacheable("${product.cache}")
+
     public String activateProduct(Long productId,Locale locale) {
         Optional<Product> product=productRepository.findById(productId);
+
+        logger.info("Caching is working");
 
         if(!product.get().isIs_active()){
 
@@ -338,9 +357,13 @@ public class ProductService {
 
     //Similar Product Variation
 
+    @Cacheable("${variation.cache}")
+
     public List<Product> similarProductVariation(Long productId,Integer offset,Integer size) {
 
         Optional<Product> product = productRepository.findById(productId);
+
+        logger.info("Caching is working");
 
         if(!product.isPresent())
             throw new ProductNotFoundException("Product Id is not valid");

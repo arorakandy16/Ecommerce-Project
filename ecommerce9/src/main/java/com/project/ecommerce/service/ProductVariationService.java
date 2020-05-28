@@ -66,9 +66,13 @@ public class ProductVariationService {
 
     //Add Product Variation
 
+    @Cacheable("${variation.cache}")
+
     public String addProductVariation(ProductVariationDto productVariationDto, Locale locale) {
         Optional<Product> product = productRepository.findById
                 (productVariationDto.getProductId());
+
+        logger.info("Caching is working");
 
         if (!product.isPresent() && !product.get().isIs_active())
             throw new ProductNotFoundException("PRODUCT NOT FOUND");
