@@ -69,8 +69,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/user/get/all").hasAnyRole("ADMIN")
                 .antMatchers("/customer/get/all").hasAnyRole("ADMIN")
                 .antMatchers("/seller/get/all").hasAnyRole("ADMIN")
-                .antMatchers("/user/activate-account/{email}").hasAnyRole("ADMIN")
-                .antMatchers("/user/de-activate-account/{email}").hasAnyRole("ADMIN")
+                .antMatchers("/user/activate-account/{id}").hasAnyRole("ADMIN")
+                .antMatchers("/user/de-activate-account/{id}").hasAnyRole("ADMIN")
 
 
                 //-----------------------Forgot Password APIs-----------------------------------------------
@@ -128,6 +128,13 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/admin/product/view/all/{categoryId}").hasRole("ADMIN")
                 .antMatchers("/admin/product/de-activate/{productId}").hasRole("ADMIN")
                 .antMatchers("/admin/product/activate/{productId}").hasRole("ADMIN")
+
+                //-----------------------Thymeleaf APIs-------------------------------------------------------
+
+//                .antMatchers("/listCustomers").hasRole("ADMIN")
+//                .antMatchers("/listSellers").hasRole("ADMIN")
+
+                //-------------------------------------------------------------------------------------------
 
                 .antMatchers("/*").permitAll()
                 .anyRequest().permitAll()

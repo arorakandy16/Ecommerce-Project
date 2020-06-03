@@ -61,8 +61,7 @@ public class CustomerController {
     public String reSentLink(@PathVariable String email,
                              @RequestHeader(name = "Accept-Language",
                                      required = false) Locale locale) {
-        String message = customerService.reSentLink(email,locale);
-        return message;
+        return customerService.reSentLink(email,locale);
     }
 
 

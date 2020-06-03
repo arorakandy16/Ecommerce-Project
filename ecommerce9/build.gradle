@@ -28,6 +28,12 @@ dependencies {
 	//----------------------------Redis-----------------------------------------------------------
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
 
+	//----------------------------Thymeleaf-----------------------------------------------------------
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+
+	//----------------------------Model Mapper-----------------------------------------------------------
+	compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.6'
+
 	//----------------------------Passay-------------------------------------------------------------
 	//Library for checking that a password complies with a custom set of rules
 	compile group: 'org.passay', name: 'passay', version: '1.5.0'

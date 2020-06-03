@@ -76,10 +76,11 @@ public class Bootstrap implements ApplicationRunner {
 
         Seller seller2 = new Seller("seller2@xyz.com", "Seller2", "", "Seller2", "gst2", "seller2_company", 250841l);
         seller2.setPassword(passwordEncoder.encode("Kandy@2145"));
+        seller2.setIs_active(false);
 
         Seller seller3 = new Seller("seller3@xyz.com", "Seller3", "", "Seller3", "gst3", "seller3_company", 250842l);
         seller3.setPassword(passwordEncoder.encode("Kandy@2145"));
-
+        seller3.setIs_active(false);
 
         userRepository.save(seller1);
         userRepository.save(seller2);
@@ -92,12 +93,13 @@ public class Bootstrap implements ApplicationRunner {
 
         //saving the customer
 
-        Customer customer1 = new Customer("ritik@mru.edu.in", "Ritik", "", "Mehta", 9728405565l);
+        Customer customer1 = new Customer("ritik@mru.edu.in", "Ritik", "", "Mehta", 9728305565l);
         customer1.setPassword(passwordEncoder.encode("Kandy@2145"));
         customer1.setIs_active(true);
 
         Customer customer2 = new Customer("muskan@niift.edu.in", "Muskan", "", "Arora", 7015317584l);
         customer2.setPassword(passwordEncoder.encode("Kandy@2145"));
+        customer2.setIs_active(false);
 
         userRepository.save(customer1);
         userRepository.save(customer2);
