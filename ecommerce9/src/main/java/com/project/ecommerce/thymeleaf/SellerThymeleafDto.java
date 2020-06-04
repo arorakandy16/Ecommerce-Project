@@ -1,4 +1,4 @@
-package com.project.ecommerce.dto;
+package com.project.ecommerce.thymeleaf;
 
 public class SellerThymeleafDto {
 

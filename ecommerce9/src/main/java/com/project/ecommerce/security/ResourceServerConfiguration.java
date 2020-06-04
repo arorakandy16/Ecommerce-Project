@@ -69,8 +69,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/user/get/all").hasAnyRole("ADMIN")
                 .antMatchers("/customer/get/all").hasAnyRole("ADMIN")
                 .antMatchers("/seller/get/all").hasAnyRole("ADMIN")
-                .antMatchers("/user/activate-account/{id}").hasAnyRole("ADMIN")
-                .antMatchers("/user/de-activate-account/{id}").hasAnyRole("ADMIN")
+//                .antMatchers("/user/activate-account/{id}").hasAnyRole("ADMIN")
+//                .antMatchers("/user/de-activate-account/{id}").hasAnyRole("ADMIN")
 
 
                 //-----------------------Forgot Password APIs-----------------------------------------------

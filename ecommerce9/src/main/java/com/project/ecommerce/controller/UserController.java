@@ -70,8 +70,7 @@ public class UserController {
     public String activateUser(@PathVariable Long id,
                                @RequestHeader(name = "Accept-Language",
                                        required = false) Locale locale){
-        String message = userService.activateUser(id,locale);
-        return message;
+        return userService.activateUser(id,locale);
     }
 
 
@@ -80,8 +79,7 @@ public class UserController {
     public String deActivateUser(@PathVariable Long id,
                                  @RequestHeader(name = "Accept-Language",
                                          required = false) Locale locale){
-        String message = userService.deActivateUser(id,locale);
-        return message;
+        return userService.deActivateUser(id,locale);
     }
 
 }

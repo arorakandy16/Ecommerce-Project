@@ -102,7 +102,6 @@ public class UserService {
 
     //Activate User
 
-    @Transactional
     public String activateUser(Long id, Locale locale) {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent())
@@ -118,7 +117,6 @@ public class UserService {
 
     //De-activate a User
 
-    @Transactional
     public String deActivateUser(Long id, Locale locale) {
         Optional<User> user = userRepository.findById(id);
 

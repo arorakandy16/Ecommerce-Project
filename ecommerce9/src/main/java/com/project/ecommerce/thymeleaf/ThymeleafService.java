@@ -1,7 +1,5 @@
 package com.project.ecommerce.thymeleaf;
 
-import com.project.ecommerce.dto.CustomerThymeleafDto;
-import com.project.ecommerce.dto.SellerThymeleafDto;
 import com.project.ecommerce.exception.UserNotFoundException;
 import com.project.ecommerce.repository.CustomerRepository;
 import com.project.ecommerce.repository.SellerRepository;
@@ -56,8 +54,8 @@ public class ThymeleafService {
         if (sellerRepository.count() > 0) {
 
             sellerRepository.findAll().forEach(p -> {
-                SellerThymeleafDto sellerRecordsDto = modelMapper.map(p, SellerThymeleafDto.class);
-                sellerThymeleafDtoList.add(sellerRecordsDto);
+                SellerThymeleafDto sellerThymeleafDto = modelMapper.map(p, SellerThymeleafDto.class);
+                sellerThymeleafDtoList.add(sellerThymeleafDto);
             });
         }
 

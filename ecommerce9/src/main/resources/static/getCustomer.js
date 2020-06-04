@@ -95,10 +95,6 @@ function doEditAccount(id,urlPath){
 
                   url  : window.location + urlPath + id,
 
-                  data : JSON.stringify(id),
-
-                  dataType : 'json',
-
                   success : function(result) {
 
                           console.log(result);

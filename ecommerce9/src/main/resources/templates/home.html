@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="ISO-8859-1" />
+
+    <title>Home</title>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" />
+
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+
+    <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+    <script src="/getC.js"></script>
+
+    <script src="/getS.js"></script>
+
+    <style>
+        .button-location{
+         margin-left:30px;
+         margin-top:30px;
+        }
+       .text-style
+        {
+          margin-left:30px;
+          color:#C40C1C;
+         font-size:30px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2 align="center">-------------List Customer & Sellers-------------</h2>
+
+    <p align="center" class="button-location">
+
+        <button class="btn btn-primary" id="showCustomerData" type="button">
+
+            <a href="http://localhost:8080/list/Customers" style="color:white">Customer List</a>
+
+        </button>
+
+    </p>
+
+    <p class="button-location" align="center">
+
+        <button class="btn btn-primary" id="showSellerData" type="button">
+
+            <a href="http://localhost:8080/list/Sellers" style="color:white">Seller List</a>
+
+        </button>
+
+    </p>
+
+</div>
+
+</body>
+
+</html>
